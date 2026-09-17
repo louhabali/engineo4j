@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <!-- DARK BACKGROUND CONTAINER -->
+  <rect width="512" height="512" rx="110" fill="#08070A"/>
+
+  <!-- CLEAN FLAT RED "E" -->
+  <path 
+    fill="#E50914" 
+    d="M 130 96 H 380 A 12 12 0 0 1 392 108 V 148 A 12 12 0 0 1 380 160 H 200 V 226 H 330 A 12 12 0 0 1 342 238 V 274 A 12 12 0 0 1 330 286 H 200 V 352 H 380 A 12 12 0 0 1 392 364 V 404 A 12 12 0 0 1 380 416 H 130 A 12 12 0 0 1 118 404 V 108 A 12 12 0 0 1 130 96 Z"
+  />
+</svg>
