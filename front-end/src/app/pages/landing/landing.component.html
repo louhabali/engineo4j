@@ -1,0 +1,157 @@
+<div class="relative min-h-screen flex flex-col justify-between px-6 md:px-16 overflow-hidden bg-bg-primary">
+  
+  <!-- SPIDER-MAN BACKGROUND IMAGE WITH DARK GRADIENT OVERLAY -->
+  <div class="absolute inset-0 z-0 pointer-events-none">
+    <img 
+      src="spiderbg.jpg" 
+      alt="Spider-Man Background" 
+      class="w-full h-full object-cover object-center opacity-40 mix-blend-luminosity scale-105 animate-upside-down-float"
+    />
+    <div class="absolute inset-0 radial-dark-overlay"></div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav class="relative z-10 flex justify-between items-center py-6 border-b border-gray-800/40 animate-fade-in-up">
+    <div class="font-netflix text-4xl text-brand-red tracking-wider spidey-glow-text cursor-pointer">
+      ENGINEO
+    </div>
+    
+    <div class="hidden md:flex gap-8 text-xs md:text-sm font-semibold tracking-wider text-gray-400">
+      <a routerLink="/catalog" class="hover:text-brand-red transition-colors duration-300">MOVIES</a>
+      <a routerLink="/recommendations" class="hover:text-brand-red transition-colors duration-300">RECOMMENDATIONS</a>
+      <a routerLink="/architecture" class="hover:text-brand-red transition-colors duration-300">GRAPH ARCHITECTURE</a>
+    </div>
+
+    <a routerLink="/auth/login" class="bg-brand-red hover:bg-brand-red-glow text-white font-netflix text-lg px-6 py-2 shadow-spidey-glow hover:scale-105 transition-all duration-300">
+      LAUNCH APP
+    </a>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <main class="relative z-10 grid grid-cols-1 lg:grid-cols-12 items-center gap-12 py-12 my-auto">
+    
+    <!-- LEFT CONTENT BLOCK -->
+    <div class="lg:col-span-7 space-y-6 animate-fade-in-up">
+      <div class="inline-flex items-center gap-2 text-red border border-brand-red/40 px-3 py-1 text-xs tracking-widest bg-brand-red/5 shadow-red-glow">
+        <span class="w-2 h-2 rounded-full bg-brand-red animate-pulse"></span>
+        GRAPH-POWERED RECOMMENDATION ENGINE
+      </div>
+      
+      <h1 class="font-netflix text-6xl md:text-8xl tracking-wide leading-none">
+        WEAVING DATA INTO <br>
+        <span class="text-brand-red spidey-glow-text">PERSONALIZED</span> STREAMING
+      </h1>
+      
+      <p class="text-gray-400 text-sm md:text-base max-w-xl font-light leading-relaxed">
+        ENGINEO leverages Neo4j graph traversals, Spring Boot microservices, and Apache Kafka to map user affinities in real-time.
+      </p>
+
+      <div class="flex flex-wrap items-center gap-6 pt-4">
+        <a routerLink="/auth/register" class="bg-brand-red hover:bg-brand-red-glow text-white font-netflix text-xl px-8 py-3 shadow-spidey-glow hover:scale-105 transition-all duration-300">
+          GET STARTED
+        </a>
+        <a routerLink="/architecture" class="group flex items-center gap-2 text-gray-300 font-semibold text-sm border-b-2 border-brand-red pb-1 hover:text-white transition-colors duration-300">
+          <span>EXPLORE ARCHITECTURE</span>
+          <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- RIGHT VISUAL TERMINAL CARD -->
+    <div class="lg:col-span-5 flex justify-center lg:justify-end animate-fade-in-up">
+      <div class="relative w-full max-w-lg bg-[#0B0A0F] border border-red-900/50 rounded-lg shadow-spidey-glow overflow-hidden font-mono text-xs">
+        
+        <!-- GLOW EFFECTS & OVERLAYS -->
+        <div class="absolute -top-16 -right-16 w-44 h-44 bg-brand-red/10 rounded-full blur-3xl pointer-events-none animate-glow-pulse"></div>
+        <div class="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_50%,rgba(0,0,0,0.3)_50%)] bg-[length:100%_4px] pointer-events-none opacity-40"></div>
+
+        <!-- TERMINAL HEADER BAR -->
+        <div class="flex items-center justify-between px-4 py-2.5 bg-[#14121B] border-b border-red-900/40 select-none">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-brand-red/80 inline-block shadow-[0_0_8px_#E50914]"></span>
+            <span class="ml-2 text-[11px] text-gray-400 font-semibold tracking-wider flex items-center gap-1.5">
+              <span class="text-brand-red"></span> cypher-shell — engineo&#64;neo4j:~$
+            </span>
+          </div>
+          <span class="text-[10px] text-red-400/90 bg-red-900/10 border border-red-900/30 px-2 py-0.5 rounded font-mono">
+            LATENCY: 0.42ms
+          </span>
+        </div>
+
+        <!-- TERMINAL BODY / CODE CONTENT -->
+        <div class="p-5 space-y-3 text-gray-300 leading-relaxed relative z-10">
+          
+         
+
+          <div class="space-y-1 bg-[#070609] p-3.5 rounded border border-red-950/80">
+            <p class="text-gray-400">
+              <span class="text-brand-red font-bold">MATCH</span> 
+              (u:<span class="text-amber-400">User</span> {{ '{' }}id: <span class="text-emerald-400">"usr_991"</span>{{ '}' }})-[r1:<span class="text-brand-cyan">RATED</span>]-&gt;(m:<span class="text-amber-400">Movie</span>)
+            </p>
+            <p class="text-gray-400">
+              <span class="text-brand-red font-bold">WHERE</span> 
+              r1.score &gt;= <span class="text-purple-400">4.5</span>
+            </p>
+            <p class="text-gray-400">
+              <span class="text-brand-red font-bold">MATCH</span> 
+              (other:<span class="text-amber-400">User</span>)-[r2:<span class="text-brand-cyan">RATED</span>]-&gt;(rec:<span class="text-amber-400">Movie</span>)
+            </p>
+            <p class="text-gray-400">
+              <span class="text-brand-red font-bold">WHERE NOT</span> 
+              (u)-[:<span class="text-brand-cyan">RATED</span>]-&gt;(rec)
+            </p>
+            <p class="text-gray-400">
+              <span class="text-brand-red font-bold">RETURN</span> 
+              rec.title, <span class="text-brand-red font-bold">AVG</span>(r2.score) <span class="text-brand-red font-bold">AS</span> score
+            </p>
+            <p class="text-gray-400">
+              <span class="text-brand-red font-bold">ORDER BY</span> score <span class="text-brand-red font-bold">DESC LIMIT</span> <span class="text-purple-400">5</span>;
+            </p>
+          </div>
+
+          <!-- TERMINAL PROMPT / CURSOR -->
+          <div class="flex items-center gap-2 text-xs pt-1 text-emerald-400">
+            <span class="text-brand-red font-bold">&gt;</span>
+            <span class="text-gray-400">executing traversal graph query...</span>
+            <span class="w-2 h-4 bg-brand-red animate-pulse inline-block"></span>
+          </div>
+
+        </div>
+
+        <!-- TERMINAL FOOTER / STATUS BAR -->
+        <div class="flex items-center justify-between px-4 py-2 bg-[#0E0D13] border-t border-red-900/30 text-[11px]">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-red-800 animate-ping"></span>
+            <span class="text-red-400 font-semibold tracking-wider">CLUSTER READY</span>
+          </div>
+          <div class="text-gray-500">
+            NODES: <span class="text-gray-300">1.2M</span> | EDGES: <span class="text-gray-300">8.4M</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FEATURES GRID -->
+  <section class="relative z-10 py-8 border-t border-gray-800/50 animate-fade-in-up">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div *ngFor="let feat of features" class="bg-bg-secondary/60 backdrop-blur-sm p-5 border border-gray-800 hover:border-brand-red/50 rounded-xl transition-all duration-300">
+        <h3 class="font-netflix text-lg text-brand-red mb-1 tracking-wider">{{ feat.title }}</h3>
+        <p class="text-gray-400 text-xs leading-relaxed">{{ feat.desc }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARTNERS / TECH STACK STRIP -->
+  <footer class="relative z-10 flex flex-wrap justify-between items-center py-4 border-t border-gray-800/40 text-xs text-gray-500">
+    <div class="font-netflix text-sm text-gray-400">ENGINEO &copy; 2026</div>
+    <div class="flex gap-6">
+      <span *ngFor="let p of partners" class="hover:text-brand-cyan transition-colors duration-300">
+        {{ p.name }}
+      </span>
+    </div>
+  </footer>
+
+</div>
