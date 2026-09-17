@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;600;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-bg-primary text-gray-100 font-body overflow-x-hidden;
+  }
+}
+
+.spidey-glow-text {
+  text-shadow: 0 0 15px #FF1E27, 0 0 35px rgba(229, 9, 20, 0.7);
+}
+
+.radial-dark-overlay {
+  background: radial-gradient(circle at 70% 30%, rgba(8, 7, 10, 0.2) 0%, rgba(8, 7, 10, 0.95) 75%);
+}
