@@ -5,6 +5,5 @@ export const routes: Routes = [
     {
     path: '',
     component: LandingComponent,
-    title: 'ENGINEO | Movie Recommendation Engine'
   },
 ];
