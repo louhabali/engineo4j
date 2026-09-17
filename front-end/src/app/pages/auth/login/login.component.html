@@ -1,0 +1,96 @@
+<div class="relative min-h-screen grid grid-cols-1 lg:grid-cols-12 bg-bg-primary overflow-hidden">
+  
+  <!-- LEFT HERO COVER (DESKTOP ONLY) -->
+  <div class="hidden lg:flex lg:col-span-7 relative items-center justify-center p-12 overflow-hidden select-none">
+    
+    <!-- SPIDER-MAN BACKGROUND (CONTAINED) -->
+    <img 
+      src="spiderbg.jpg" 
+      alt="Spider-Man Background" 
+      class="absolute inset-0 w-full h-full object-cover opacity-35 mix-blend-luminosity" 
+    />
+    
+    <!-- RADIAL DARK OVERLAY -->
+    <div class="absolute inset-0 radial-dark-overlay"></div>
+    
+    <!-- SEAMLESS RIGHT EDGE GRADIENT FADE -->
+    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-bg-primary"></div>
+    
+    <div class="relative z-10 space-y-4 max-w-md">
+      <a routerLink="/" class="font-netflix text-5xl text-brand-red tracking-wider spidey-glow-text inline-block mb-2">ENGINEO</a>
+      <h2 class="font-netflix text-4xl text-white tracking-wide leading-snug">ACCELERATE REAL-TIME GRAPH DISCOVERY</h2>
+      <p class="text-gray-400 text-xs leading-relaxed font-mono">
+        Sign in to query Neo4j graph traversals, evaluate real-time collaborative filters, and manage streaming recommendation workloads.
+      </p>
+    </div>
+  </div>
+
+  <!-- RIGHT FORM PANEL -->
+  <div class="lg:col-span-5 flex flex-col justify-between p-8 md:p-12 z-10 my-auto min-h-screen bg-bg-primary">
+    
+    <!-- TOP NAVIGATION (RETURN TO LANDING) -->
+    <div class="flex justify-between items-center w-full">
+      <a routerLink="/" class="font-netflix text-3xl text-brand-red spidey-glow-text lg:hidden">ENGINEO</a>
+      <a routerLink="/" class="ml-auto flex items-center gap-2 text-xs font-mono text-gray-400 hover:text-brand-red transition-colors duration-300">
+        <span>←</span> BACK TO LANDING
+      </a>
+    </div>
+
+    <!-- MAIN FORM BODY -->
+    <div class="space-y-6 max-w-sm mx-auto w-full my-auto">
+      <div class="space-y-1">
+        <h2 class="font-netflix text-3xl text-white tracking-wider">WELCOME BACK</h2>
+        <p class="text-xs text-gray-400 font-mono">AUTHENTICATE USER SESSION</p>
+      </div>
+
+      <!-- ERROR ALERT -->
+      <div *ngIf="errorMessage" class="bg-brand-red/10 border border-brand-red/40 text-red-400 px-3 py-2 rounded text-xs font-mono">
+        {{ errorMessage }}
+      </div>
+
+      <form (ngSubmit)="onLogin()" class="space-y-5 font-mono text-xs">
+        <div>
+          <label class="block text-gray-400 mb-1.5 font-semibold">EMAIL ADDRESS</label>
+          <input 
+            type="email" 
+            [(ngModel)]="email" 
+            name="email"
+            placeholder="user@engineo.io" 
+            class="w-full bg-[#0B0A0F] border border-gray-800 focus:border-brand-red text-gray-200 px-4 py-3 rounded outline-none transition-all duration-300"
+            required
+          />
+        </div>
+
+        <div>
+          <label class="block text-gray-400 mb-1.5 font-semibold">PASSWORD</label>
+          <input 
+            type="password" 
+            [(ngModel)]="password" 
+            name="password"
+            placeholder="••••••••••••" 
+            class="w-full bg-[#0B0A0F] border border-gray-800 focus:border-brand-red text-gray-200 px-4 py-3 rounded outline-none transition-all duration-300"
+            required
+          />
+        </div>
+
+        <button 
+          type="submit" 
+          class="w-full bg-brand-red hover:bg-brand-red-glow text-white font-netflix text-lg py-3 shadow-spidey-glow hover:scale-[1.02] transition-all duration-300 mt-3">
+          LAUNCH APP
+        </button>
+      </form>
+
+      <div class="text-center pt-2 text-xs text-gray-400 font-mono">
+        NEW USER? 
+        <a routerLink="/register" class="text-brand-red font-semibold hover:underline ml-1">CREATE NODE</a>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="text-center text-[10px] text-gray-600 font-mono">
+      ENGINEO GRAPH INFRASTRUCTURE &copy; 2026
+    </div>
+
+  </div>
+
+</div>
