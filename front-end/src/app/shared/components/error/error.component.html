@@ -1,0 +1,31 @@
+<div class="min-h-screen bg-bg-primary text-gray-200 font-mono flex flex-col items-center justify-center p-6 text-center relative overflow-hidden select-none">
+  
+  <!-- SPIDEY OVERLAYS -->
+  <img src="spiderbg.webp" alt="Spider-Man Background" class="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-luminosity" />
+  <div class="absolute inset-0 radial-dark-overlay"></div>
+
+  <!-- CONTENT NODE -->
+  <div class="relative z-10 space-y-6 max-w-md bg-[#0B0A0F]/90 border border-gray-800 p-8 rounded-xl backdrop-blur-md shadow-spidey-glow">
+    
+    <span class="font-netflix text-7xl text-brand-red tracking-widest block spidey-glow-text">
+      {{ currentError.code }}
+    </span>
+
+    <div class="space-y-2">
+      <h2 class="font-netflix text-2xl text-white tracking-wider">{{ currentError.title }}</h2>
+      <p class="text-xs text-gray-400 leading-relaxed">{{ currentError.description }}</p>
+    </div>
+
+    <div class="pt-4 border-t border-gray-800 flex items-center justify-center gap-4 text-xs">
+      <a routerLink="/" class="bg-brand-red hover:bg-brand-red-glow text-white font-netflix px-5 py-2.5 rounded transition-all shadow-spidey-glow">
+        RETURN TO HOME
+      </a>
+      <a routerLink="/login" *ngIf="errorCode === '401' || errorCode === '403'" class="border border-gray-700 hover:border-brand-red text-gray-300 px-5 py-2.5 rounded transition-all">
+        SIGN IN
+      </a>
+    </div>
+
+  </div>
+
+  <p class="relative z-10 text-[10px] text-gray-600 mt-8">ENGINEO GRAPH INFRASTRUCTURE &copy; 2026</p>
+</div>

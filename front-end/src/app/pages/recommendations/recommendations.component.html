@@ -1,0 +1,86 @@
+<div class="min-h-screen bg-bg-primary text-gray-200 font-mono p-6 md:p-12">
+  
+  <!-- NAVBAR -->
+  <header class="max-w-7xl mx-auto flex justify-between items-center pb-8 border-b border-gray-800">
+    <a routerLink="/" class="font-netflix text-3xl text-brand-red spidey-glow-text">ENGINEO</a>
+    <div class="flex items-center gap-6 text-xs">
+      <a routerLink="/" class="text-gray-400 hover:text-white transition-colors">HOME</a>
+      <a routerLink="/profile" class="text-gray-400 hover:text-white transition-colors">MY PROFILE</a>
+    </div>
+  </header>
+
+  <!-- MAIN DECK -->
+  <main class="max-w-7xl mx-auto mt-10 space-y-8">
+    
+    <div class="space-y-1">
+      <div class="inline-flex items-center gap-2 bg-brand-red/10 border border-brand-red/30 px-3 py-1 rounded-full text-[10px] text-brand-red">
+        <span class="w-1.5 h-1.5 rounded-full bg-brand-red animate-ping"></span>
+        <span>NEO4J GRAPH TRAVERSAL ACTIVE</span>
+      </div>
+      <h1 class="font-netflix text-4xl text-white tracking-wider">COLLABORATIVE FILTERING FEED</h1>
+      <p class="text-xs text-gray-400">RECOMMENDED NODES BASED ON YOUR WATCH AFFINITY & GRAPH CONNECTIONS</p>
+    </div>
+
+    <!-- CARDS GRID -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div *ngFor="let item of recommendations" class="bg-[#0B0A0F] border border-gray-800 rounded-xl overflow-hidden hover:border-brand-red/60 transition-all duration-300 flex flex-col justify-between">
+        
+        <div class="relative aspect-[2/3] overflow-hidden">
+          <img [src]="item.posterUrl" [alt]="item.title" class="w-full h-full object-cover opacity-90 hover:scale-105 transition-transform duration-500" />
+          
+          <!-- AFFINITY BADGE -->
+          <div class="absolute top-3 left-3 bg-black/80 border border-brand-red/50 text-brand-red text-[10px] px-2.5 py-1 rounded-full font-bold">
+            {{ item.affinityScore }}% MATCH
+          </div>
+        </div>
+
+        <div class="p-4 space-y-3 flex-1 flex flex-col justify-between">
+          <div>
+            <h3 class="font-netflix text-lg text-white truncate">{{ item.title }}</h3>
+            <p class="text-[10px] text-gray-500 mt-0.5">{{ item.genre }} &bull; {{ item.year }}</p>
+            <p class="text-[10px] text-brand-red/80 mt-2">Connected via: {{ item.connectedNode }}</p>
+          </div>
+
+          <!-- RATING TRIGGER -->
+          <div class="pt-3 border-t border-gray-800/80 flex items-center justify-between">
+            <span class="text-[10px] text-gray-400">
+              {{ item.userRating ? 'YOUR RATING: ' + item.userRating + '★' : 'NOT RATED YET' }}
+            </span>
+            <button (click)="openRatingModal(item)" class="bg-brand-red/10 border border-brand-red/40 hover:bg-brand-red hover:text-white text-brand-red text-[10px] px-3 py-1 rounded transition-all">
+              RATE NODE
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- INTERACTIVE STAR RATING MODAL -->
+  <div *ngIf="selectedRatingItem" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#0B0A0F] border border-gray-800 p-6 rounded-xl max-w-sm w-full space-y-5 text-center relative shadow-spidey-glow">
+      
+      <button (click)="closeRatingModal()" class="absolute top-3 right-3 text-gray-500 hover:text-white text-xs">✕</button>
+
+      <div class="space-y-1">
+        <h3 class="font-netflix text-xl text-white tracking-wide">EVALUATE NODE</h3>
+        <p class="text-xs text-brand-red font-semibold">{{ selectedRatingItem.title }}</p>
+      </div>
+
+      <!-- STAR RATING CONTROLLER -->
+      <div class="flex justify-center items-center gap-2 text-2xl py-2">
+        <button 
+          *ngFor="let star of [1, 2, 3, 4, 5]" 
+          (mouseenter)="hoveredStar = star" 
+          (click)="setRating(star)"
+          class="transition-transform hover:scale-125 focus:outline-none">
+          <span [class.text-brand-red]="star <= hoveredStar" [class.text-gray-700]="star > hoveredStar">★</span>
+        </button>
+      </div>
+
+      <p class="text-[10px] text-gray-500">CLICK A STAR TO SAVE RATING TO GRAPH ENGINE</p>
+    </div>
+  </div>
+
+</div>
