@@ -26,7 +26,9 @@ public class MovieController {
 
     @GetMapping("/{movieId}")
     public ResponseEntity<MovieResponseDto> getMovieById(@PathVariable String movieId) {
-        return ResponseEntity.ok(movieService.getMovieById(movieId));
+        // convert parameter to int
+        int id = Integer.parseInt(movieId);
+        return ResponseEntity.ok(movieService.getMovieById(id));
     }
 
     @GetMapping("/search")

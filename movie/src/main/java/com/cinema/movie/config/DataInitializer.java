@@ -29,11 +29,11 @@ public class DataInitializer implements CommandLineRunner {
 
         List<String> titles = List.of(
           
-            "Interstellar", "Inception", "The Matrix", 
-            "Blade Runner 2049", "Dune: Part Two", "WALL-E",
+            "Avengers: Infinity War", "Blade Runner 2049", "Interstellar", "Inception", "The Matrix", 
+             "Dune: Part Two", "WALL-E",
             
             // Action & Superhero
-            "The Dark Knight", "The Dark Knight Rises", "Avengers: Infinity War", "Avengers: Endgame", 
+            "The Dark Knight", "The Dark Knight Rises", "Avengers: Endgame", 
             "Spider-Man: Into the Spider-Verse", "Gladiator II", "Top Gun: Maverick", 
             "Mad Max: Fury Road", "Die Hard",
             

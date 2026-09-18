@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface MovieService {
     List<MovieResponseDto> getAllMovies();
-    MovieResponseDto getMovieById(String movieId);
+    MovieResponseDto getMovieById(long id);
     List<MovieResponseDto> searchByTitle(String title);
     List<MovieResponseDto> filterByGenre(String genre);
     List<MovieResponseDto> filterByYear(Integer year);

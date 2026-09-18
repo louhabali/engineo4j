@@ -25,10 +25,10 @@ public class MovieServiceImpl implements MovieService {
                 .map(this::mapToDto)
                 .toList();
     }
-
+    
     @Override
-    public MovieResponseDto getMovieById(String movieId) {
-        return movieRepository.findByMovieId(movieId)
+    public MovieResponseDto getMovieById(long movieId) {
+        return movieRepository.findById(movieId)
                 .map(this::mapToDto)
                 .orElseThrow(() -> new MovieNotFoundException("Movie not found with ID: " + movieId));
     }
