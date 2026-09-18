@@ -38,7 +38,7 @@ export class CatalogComponent implements OnInit {
             title: first.title,
             tagline: 'FEATURED MOVIE FROM YOUR CATALOG',
             description: 'Explore the latest additions to your cinematic collection.',
-            rating: first.rating || 8.0,
+            rating: first.averageRating || 8.0,
             year: first.releaseYear || 2024,
             matchPercentage: 98,
             bannerUrl: first.bannerUrl || 'spiderbg.webp'

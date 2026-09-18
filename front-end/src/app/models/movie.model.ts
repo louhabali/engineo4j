@@ -10,20 +10,24 @@ export interface FeaturedMovie {
 }
 
 export interface MovieCard {
-  id: number;
+  id: number | string; 
+  movieId?: string;
   title: string;
-  releaseYear: number;
-  rating: number;
-  genres: string[];
+  releaseYear: number;   
+  averageRating: number; 
+  genres: string[];    
   posterUrl: string;
   bannerUrl?: string;
 }
+
 export interface MovieDetail {
-  id: number;
+  id: number | string;
+  movieId?: string;
   title: string;
   tagline: string;
-  synopsis: string;
-  rating: number;
+  synopsis?: string;    
+  description?: string;
+  averageRating: number;
   releaseYear: number;
   duration: string;
   director: string;
@@ -31,10 +35,11 @@ export interface MovieDetail {
   bannerUrl: string;
   posterUrl: string;
   userRating?: number;
+  inwatchlist?: boolean;
 }
 
 export interface RelatedGraphMovie {
-  id: number;
+  id: number | string;
   title: string;
   posterUrl: string;
   affinityScore: number;
