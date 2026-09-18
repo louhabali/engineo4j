@@ -2,26 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { FeaturedMovie, MovieCard } from '../../models/movie.model';
 
-export interface FeaturedMovie {
-  id: number;
-  title: string;
-  tagline: string;
-  description: string;
-  rating: number;
-  year: number;
-  matchPercentage: number;
-  bannerUrl: string;
-}
 
-export interface MovieCard {
-  id: number;
-  title: string;
-  year: number;
-  rating: number;
-  genre: string;
-  posterUrl: string;
-}
 
 @Component({
   selector: 'app-home',

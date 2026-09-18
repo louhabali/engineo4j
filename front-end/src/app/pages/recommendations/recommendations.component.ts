@@ -2,17 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { GraphRecommendation } from '../../models/recommendations.model';
 
-export interface GraphRecommendation {
-  id: number;
-  title: string;
-  year: number;
-  genre: string;
-  posterUrl: string;
-  affinityScore: number;
-  connectedNode: string;
-  userRating?: number;
-}
 
 @Component({
   selector: 'app-recommendations',

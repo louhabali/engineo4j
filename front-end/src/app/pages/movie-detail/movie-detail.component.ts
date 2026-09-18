@@ -1,29 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { MovieDetail, RelatedGraphMovie } from '../../models/movie.model';
 
-export interface MovieDetail {
-  id: number;
-  title: string;
-  tagline: string;
-  synopsis: string;
-  rating: number;
-  releaseYear: number;
-  duration: string;
-  director: string;
-  genres: string[];
-  bannerUrl: string;
-  posterUrl: string;
-  userRating?: number;
-}
-
-export interface RelatedGraphMovie {
-  id: number;
-  title: string;
-  posterUrl: string;
-  affinityScore: number;
-  connectionReason: string;
-}
 
 @Component({
   selector: 'app-movie-detail',

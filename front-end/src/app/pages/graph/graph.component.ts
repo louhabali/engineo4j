@@ -1,13 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-
-export interface GraphNode {
-  id: string;
-  label: string;
-  type: 'movie' | 'genre' | 'user';
-  connections: string[];
-}
+import { GraphNode } from '../../models/graph.model';
 
 @Component({
   selector: 'app-graph-explorer',
