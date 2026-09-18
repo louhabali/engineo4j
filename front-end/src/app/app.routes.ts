@@ -3,6 +3,7 @@ import { LandingComponent } from './pages/landing/landing.component';
 import { RegisterComponent } from './pages/auth/register/register.component';
 import { LoginComponent } from './pages/auth/login/login.component';
 import { ProfileComponent } from './pages/auth/profile/profile.component';
+import { CatalogComponent } from './pages/catalog/catalog.component';
 
 export const routes: Routes = [
     {
@@ -20,5 +21,9 @@ export const routes: Routes = [
   {
     path :'profile',
     component : ProfileComponent, 
+  },
+  {
+    path :'catalog',
+    component : CatalogComponent,
   }
 ];

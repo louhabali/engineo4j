@@ -34,8 +34,8 @@ export class ProfileComponent implements OnInit {
     fullName: 'John Doe',
     email: 'user@engineo.io',
     memberSince: '2026',
-    totalWatchlist: 18,
-    totalFavorites: 12,
+    totalWatchlist: 12,
+    totalFavorites: 8,
     totalRatings: 42
   };
 

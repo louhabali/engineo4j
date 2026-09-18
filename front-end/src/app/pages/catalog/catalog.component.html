@@ -1,0 +1,182 @@
+<div class="min-h-screen bg-bg-primary text-gray-200 font-mono overflow-x-hidden selection:bg-brand-red selection:text-white">
+  
+  <!-- NAVIGATION BAR -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-bg-primary/80 backdrop-blur-md border-b border-gray-800/80 px-6 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      
+      <div class="flex items-center gap-8">
+        <a routerLink="/" class="font-netflix text-3xl text-brand-red tracking-wider spidey-glow-text">ENGINEO</a>
+        <div class="hidden md:flex items-center gap-6 text-xs text-gray-400">
+          <a routerLink="/" class="text-white hover:text-brand-red transition-colors">DISCOVER</a>
+          <a routerLink="/profile" class="hover:text-brand-red transition-colors">MY DECK</a>
+        </div>
+      </div>
+
+      <!-- SEARCH BAR & AUTH BUTTONS -->
+      <div class="flex items-center gap-4">
+        <div class="relative hidden sm:block w-48 lg:w-64">
+          <input 
+            type="text" 
+            [(ngModel)]="searchQuery" 
+            (keyup.enter)="onSearch()"
+            placeholder="Search graph nodes..." 
+            class="w-full bg-[#0B0A0F] border border-gray-800 focus:border-brand-red text-xs text-gray-200 pl-8 pr-3 py-1.5 rounded outline-none transition-all duration-300"
+          />
+          <span class="absolute left-2.5 top-2 text-xs text-gray-500">🔍</span>
+        </div>
+
+        <a routerLink="/login" class="text-xs text-gray-300 hover:text-white px-3 py-1.5 transition-colors">
+          SIGN IN
+        </a>
+        <a routerLink="/register" class="text-xs bg-brand-red hover:bg-brand-red-glow text-white font-netflix px-4 py-1.5 rounded shadow-spidey-glow hover:scale-[1.02] transition-all">
+          CREATE NODE
+        </a>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- HERO SECTION WITH FULL BLEED BACKGROUND & GRADIENT FADE -->
+  <section class="relative min-h-[85vh] flex items-end pt-24 pb-16 px-6 md:px-12 overflow-hidden border-b border-gray-800/60">
+    
+    <!-- SPIDER-MAN HERO BACKGROUND -->
+    <img 
+      [src]="heroMovie.bannerUrl" 
+      alt="Hero Banner" 
+      class="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-luminosity select-none" 
+    />
+    
+    <!-- GRADIENT OVERLAYS TO PURE DARK -->
+    <div class="absolute inset-0 radial-dark-overlay"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-bg-primary via-bg-primary/40 to-transparent"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-bg-primary via-transparent to-bg-primary/80"></div>
+
+    <!-- HERO CONTENT -->
+    <div class="relative z-10 max-w-3xl space-y-4">
+      
+      <!-- GRAPH ENGINE BADGE -->
+      <div class="inline-flex items-center gap-2 bg-brand-red/10 border border-brand-red/30 px-3 py-1 rounded-full text-[10px] text-brand-red">
+        <span class="w-1.5 h-1.5 rounded-full bg-brand-red animate-ping"></span>
+        <span>GRAPH MATCH: {{ heroMovie.matchPercentage }}% AFFINITY SCORE</span>
+      </div>
+
+      <h1 class="font-netflix text-4xl sm:text-6xl text-white tracking-wider leading-tight">
+        {{ heroMovie.title }}
+      </h1>
+
+      <p class="text-xs text-brand-red font-bold tracking-widest">
+        {{ heroMovie.tagline }}
+      </p>
+
+      <p class="text-xs text-gray-400 max-w-xl leading-relaxed">
+        {{ heroMovie.description }}
+      </p>
+
+      <!-- CTAs -->
+      <div class="flex items-center gap-4 pt-2">
+        <a routerLink="/register" class="bg-brand-red hover:bg-brand-red-glow text-white font-netflix text-base px-6 py-2.5 rounded shadow-spidey-glow hover:scale-[1.02] transition-all flex items-center gap-2">
+          <span>▶</span> EXPLORE RECOMMENDATIONS
+        </a>
+        <a routerLink="/login" class="bg-[#0B0A0F] border border-gray-800 hover:border-gray-600 text-gray-300 text-xs px-5 py-3 rounded transition-all">
+          VIEW TRAVERSE GRAPH
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- LIVE GRAPH METRICS STRIP -->
+  <section class="bg-[#0B0A0F] border-b border-gray-800/80 py-4 px-6 text-xs text-gray-400">
+    <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+      <div>
+        <p class="font-netflix text-xl text-brand-red">10,000+</p>
+        <p class="text-[10px] text-gray-500">MOVIE NODES CONNECTED</p>
+      </div>
+      <div>
+        <p class="font-netflix text-xl text-brand-red">&lt; 12ms</p>
+        <p class="text-[10px] text-gray-500">NEO4J TRAVERSAL LATENCY</p>
+      </div>
+      <div>
+        <p class="font-netflix text-xl text-brand-red">REAL-TIME</p>
+        <p class="text-[10px] text-gray-500">COLLABORATIVE FILTERING</p>
+      </div>
+      <div>
+        <p class="font-netflix text-xl text-brand-red">99.4%</p>
+        <p class="text-[10px] text-gray-500">PRECISION ACCURACY</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CATALOG & CAROUSELS -->
+  <main class="max-w-7xl mx-auto px-6 py-12 space-y-12">
+
+    <!-- GENRE FILTER BUTTONS -->
+    <div class="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-none">
+      <button 
+        *ngFor="let genre of genres"
+        (click)="onGenreSelect(genre)"
+        [class.bg-brand-red]="selectedGenre === genre"
+        [class.text-white]="selectedGenre === genre"
+        [class.bg-[#0B0A0F]]="selectedGenre !== genre"
+        [class.text-gray-400]="selectedGenre !== genre"
+        class="border border-gray-800 hover:border-brand-red/50 text-xs px-4 py-1.5 rounded-full transition-all whitespace-nowrap">
+        {{ genre }}
+      </button>
+    </div>
+
+    <!-- CAROUSEL 1: TRENDING NOW -->
+    <section class="space-y-4">
+      <div class="flex justify-between items-center border-b border-gray-800/80 pb-2">
+        <h3 class="font-netflix text-2xl text-white tracking-wider">TRENDING NODES</h3>
+        <a routerLink="/register" class="text-xs text-brand-red hover:underline">VIEW ALL →</a>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div *ngFor="let movie of trendingMovies" class="group bg-[#0B0A0F] border border-gray-800/80 rounded-lg overflow-hidden hover:border-brand-red/60 transition-all duration-300">
+          <div class="aspect-[2/3] relative overflow-hidden">
+            <img [src]="movie.posterUrl" [alt]="movie.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100" />
+            <div class="absolute top-2 right-2 bg-black/80 text-brand-red border border-brand-red/40 px-2 py-0.5 rounded text-[10px] font-bold">
+              ★ {{ movie.rating }}
+            </div>
+          </div>
+          <div class="p-3">
+            <h4 class="font-netflix text-sm text-white truncate group-hover:text-brand-red transition-colors">{{ movie.title }}</h4>
+            <p class="text-[10px] text-gray-500 mt-0.5">{{ movie.genre }} &bull; {{ movie.year }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CAROUSEL 2: HIGH-AFFINITY GRAPH PICK -->
+    <section class="space-y-4">
+      <div class="flex justify-between items-center border-b border-gray-800/80 pb-2">
+        <h3 class="font-netflix text-2xl text-white tracking-wider">GRAPH ENGINE RECOMMENDATIONS</h3>
+        <span class="text-[10px] text-gray-500">FILTERED BY MATRIX FACTORIZATION</span>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div *ngFor="let movie of graphRecommendations" class="group bg-[#0B0A0F] border border-gray-800/80 rounded-lg overflow-hidden hover:border-brand-red/60 transition-all duration-300">
+          <div class="aspect-[2/3] relative overflow-hidden">
+            <img [src]="movie.posterUrl" [alt]="movie.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100" />
+            <div class="absolute top-2 right-2 bg-black/80 text-brand-red border border-brand-red/40 px-2 py-0.5 rounded text-[10px] font-bold">
+              ★ {{ movie.rating }}
+            </div>
+          </div>
+          <div class="p-3">
+            <h4 class="font-netflix text-sm text-white truncate group-hover:text-brand-red transition-colors">{{ movie.title }}</h4>
+            <p class="text-[10px] text-gray-500 mt-0.5">{{ movie.genre }} &bull; {{ movie.year }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-gray-800/80 bg-[#0B0A0F] py-8 px-6 text-center text-[10px] text-gray-600 space-y-2">
+    <p class="font-netflix text-sm text-brand-red spidey-glow-text">ENGINEO</p>
+    <p>POWERED BY NEO4J, SPRING BOOT MICROSERVICES & ANGULAR</p>
+    <p>&copy; 2026 ENGINEO GRAPH INFRASTRUCTURE</p>
+  </footer>
+
+</div>
