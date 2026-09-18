@@ -12,10 +12,11 @@ export interface FeaturedMovie {
 export interface MovieCard {
   id: number;
   title: string;
-  year: number;
+  releaseYear: number;
   rating: number;
-  genre: string;
+  genres: string[];
   posterUrl: string;
+  bannerUrl?: string;
 }
 export interface MovieDetail {
   id: number;

@@ -36,7 +36,6 @@
             placeholder="Search graph nodes..."
             class="w-full bg-[#0B0A0F] border border-gray-800 focus:border-brand-red text-xs text-gray-200 pl-8 pr-3 py-1.5 rounded outline-none transition-all duration-300"
           />
-          
         </div>
 
         <a
@@ -61,7 +60,7 @@
   >
     <!-- SPIDER-MAN HERO BACKGROUND -->
     <img
-      [src]="heroMovie.bannerUrl"
+      [src]="heroMovie?.bannerUrl"
       alt="Hero Banner"
       class="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-luminosity select-none"
     />
@@ -83,22 +82,22 @@
       >
         <span class="w-1.5 h-1.5 rounded-full bg-brand-red animate-ping"></span>
         <span
-          >GRAPH MATCH: {{ heroMovie.matchPercentage }}% AFFINITY SCORE</span
+          >GRAPH MATCH: {{ heroMovie?.matchPercentage }}% AFFINITY SCORE</span
         >
       </div>
 
       <h1
         class="font-netflix text-4xl sm:text-6xl text-white tracking-wider leading-tight"
       >
-        {{ heroMovie.title }}
+        {{ heroMovie?.title }}
       </h1>
 
       <p class="text-xs text-brand-red font-bold tracking-widest">
-        {{ heroMovie.tagline }}
+        {{ heroMovie?.tagline }}
       </p>
 
       <p class="text-xs text-gray-400 max-w-xl leading-relaxed">
-        {{ heroMovie.description }}
+        {{ heroMovie?.description }}
       </p>
 
       <!-- CTAs -->
@@ -201,7 +200,7 @@
               {{ movie.title }}
             </h4>
             <p class="text-[10px] text-gray-500 mt-0.5">
-              {{ movie.genre }} &bull; {{ movie.year }}
+              {{ movie.genres?.join(', ') }} &bull; {{ movie.releaseYear }}
             </p>
           </div>
         </div>
@@ -246,7 +245,7 @@
               {{ movie.title }}
             </h4>
             <p class="text-[10px] text-gray-500 mt-0.5">
-              {{ movie.genre }} &bull; {{ movie.year }}
+              {{ movie.genres?.join(', ') }} &bull; {{ movie.releaseYear }}
             </p>
           </div>
         </div>
