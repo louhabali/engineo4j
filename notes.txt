@@ -1,0 +1,7 @@
+MATCH (u:User {id: $userId})-[r1:RATED]->(m:Movie)<-[r2:RATED]-(other:User)
+WHERE r1.rating >= 4.0 AND r2.rating >= 4.0 AND u <> other
+MATCH (other)-[r3:RATED]->(rec:Movie)
+WHERE NOT (u)-[:RATED]->(rec) AND r3.rating >= 4.0
+RETURN rec.id AS id, rec.title AS title, rec.genre AS genre, AVG(r3.rating) AS predictedRating
+ORDER BY predictedRating DESC
+LIMIT 10    
