@@ -1,7 +1,7 @@
 <div class="relative min-h-screen grid grid-cols-1 lg:grid-cols-12 bg-bg-primary overflow-hidden font-mono">
   
-  <!-- LEFT PANEL: SPIDEY AMBIENT HERO + USER NODE STATS (MATCHES CONCEPT 2 SPLIT) -->
-  <div class="hidden lg:flex lg:col-span-4 relative flex-col justify-between p-8 border-r border-gray-800/60 overflow-hidden select-none">
+  <!-- LEFT PANEL: SPIDEY AMBIENT HERO + USER NODE STATS (TOP ON MOBILE, SIDEBAR ON DESKTOP) -->
+  <div class="lg:col-span-4 relative flex flex-col justify-between p-6 md:p-8 border-b lg:border-b-0 lg:border-r border-gray-800/60 overflow-hidden select-none">
     
     <!-- BACKGROUND & OVERLAYS -->
     <img 
@@ -13,15 +13,20 @@
     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-bg-primary"></div>
 
     <!-- HEADER LOGO -->
-    <div class="relative z-10">
-      <a routerLink="/" class="font-netflix text-4xl text-brand-red tracking-wider spidey-glow-text">ENGINEO</a>
-      <p class="text-[10px] text-gray-500 mt-1">CINEMA GRAPH INFRASTRUCTURE</p>
+    <div class="relative z-10 flex items-center justify-between lg:block">
+      <div>
+        <a routerLink="/" class="font-netflix text-3xl md:text-4xl text-brand-red tracking-wider spidey-glow-text">ENGINEO</a>
+        <p class="text-[10px] text-gray-500 mt-0.5">CINEMA GRAPH INFRASTRUCTURE</p>
+      </div>
+      <button (click)="onLogout()" class="lg:hidden text-xs text-brand-red border border-brand-red/40 px-3 py-1 rounded hover:bg-brand-red/10">
+        LOGOUT
+      </button>
     </div>
 
     <!-- USER NODE PROFILE CARD -->
-    <div class="relative z-10 my-auto text-center space-y-4 max-w-xs mx-auto">
-      <div class="relative w-24 h-24 mx-auto rounded-full bg-brand-red/10 border-2 border-brand-red flex items-center justify-center shadow-spidey-glow">
-        <span class="font-netflix text-4xl text-white">{{ user.fullName.charAt(0) }}</span>
+    <div class="relative z-10 my-6 lg:my-auto text-center space-y-4 max-w-xs mx-auto">
+      <div class="relative w-20 h-20 md:w-24 md:h-24 mx-auto rounded-full bg-brand-red/10 border-2 border-brand-red flex items-center justify-center shadow-spidey-glow">
+        <span class="font-netflix text-3xl md:text-4xl text-white">{{ user.fullName.charAt(0) }}</span>
       </div>
 
       <div>
@@ -49,24 +54,18 @@
       </div>
     </div>
 
-    <!-- FOOTER NAV & LOGOUT -->
-    <div class="relative z-10 pt-4 border-t border-gray-800/60 flex items-center justify-between text-xs">
+    <!-- FOOTER NAV & LOGOUT (DESKTOP ONLY) -->
+    <div class="relative z-10 pt-4 border-t border-gray-800/60 hidden lg:flex items-center justify-between text-xs">
       <a routerLink="/" class="text-gray-400 hover:text-white transition-colors">← HOME</a>
       <button (click)="onLogout()" class="text-brand-red hover:underline">LOGOUT SESSION</button>
     </div>
   </div>
 
   <!-- RIGHT PANEL: CINEMA DECK & TABBED CONTENT -->
-  <div class="lg:col-span-8 flex flex-col justify-between p-6 md:p-10 z-10 min-h-screen bg-bg-primary overflow-y-auto">
+  <div class="lg:col-span-8 flex flex-col justify-between p-6 md:p-10 z-10 bg-bg-primary overflow-y-auto">
     
-    <!-- TOP NAVBAR FOR MOBILE + TAB SWITCHER -->
+    <!-- DECK NAVIGATION TABS -->
     <div>
-      <div class="flex justify-between items-center mb-6 lg:hidden">
-        <a routerLink="/" class="font-netflix text-3xl text-brand-red spidey-glow-text">ENGINEO</a>
-        <button (click)="onLogout()" class="text-xs text-brand-red border border-brand-red/40 px-3 py-1 rounded">LOGOUT</button>
-      </div>
-
-      <!-- DECK NAVIGATION TABS -->
       <div class="flex items-center gap-6 border-b border-gray-800 pb-3">
         <button 
           (click)="setTab('watchlist')" 
@@ -107,7 +106,10 @@
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          <div *ngFor="let item of watchlist" class="group relative bg-[#0B0A0F] border border-gray-800/80 rounded-lg overflow-hidden hover:border-brand-red/60 transition-all duration-300">
+          <div 
+            *ngFor="let item of watchlist" 
+            [routerLink]="['/movie', item.id]"
+            class="group relative bg-[#0B0A0F] border border-gray-800/80 rounded-lg overflow-hidden hover:border-brand-red/60 transition-all duration-300 cursor-pointer">
             <div class="aspect-[2/3] overflow-hidden relative">
               <img [src]="item.posterUrl" [alt]="item.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100" />
               <div class="absolute top-2 right-2 bg-black/80 text-brand-red border border-brand-red/40 px-2 py-0.5 rounded text-[10px] font-bold">
@@ -127,7 +129,10 @@
         <p class="text-xs text-gray-400">HIGHEST AFFINITY NODES IN YOUR PROFILE</p>
 
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          <div *ngFor="let item of favorites" class="group relative bg-[#0B0A0F] border border-gray-800/80 rounded-lg overflow-hidden hover:border-brand-red/60 transition-all duration-300">
+          <div 
+            *ngFor="let item of favorites" 
+            [routerLink]="['/movie', item.id]"
+            class="group relative bg-[#0B0A0F] border border-gray-800/80 rounded-lg overflow-hidden hover:border-brand-red/60 transition-all duration-300 cursor-pointer">
             <div class="aspect-[2/3] overflow-hidden relative">
               <img [src]="item.posterUrl" [alt]="item.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100" />
               <div class="absolute top-2 right-2 bg-black/80 text-brand-red border border-brand-red/40 px-2 py-0.5 rounded text-[10px] font-bold">

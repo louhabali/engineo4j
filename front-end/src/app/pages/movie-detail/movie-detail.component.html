@@ -1,0 +1,136 @@
+<div class="min-h-screen bg-bg-primary text-gray-200 font-mono overflow-x-hidden selection:bg-brand-red selection:text-white">
+  
+  <!-- NAVBAR -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-bg-primary/80 backdrop-blur-md border-b border-gray-800 px-6 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <a routerLink="/" class="font-netflix text-3xl text-brand-red tracking-wider spidey-glow-text">ENGINEO</a>
+      <div class="flex items-center gap-6 text-xs text-gray-400">
+        <a routerLink="/" class="hover:text-white transition-colors">HOME</a>
+        <a routerLink="/recommendations" class="hover:text-white transition-colors">RECOMMENDATIONS</a>
+        <a routerLink="/profile" class="hover:text-white transition-colors">MY PROFILE</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO BANNER SECTION -->
+  <section class="relative pt-24 pb-12 px-6 md:px-12 border-b border-gray-800/80 overflow-hidden">
+    
+    <!-- BACKGROUND ARTWORK -->
+    <img [src]="movie.bannerUrl" [alt]="movie.title" class="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-luminosity select-none" />
+    <div class="absolute inset-0 radial-dark-overlay"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-bg-primary via-bg-primary/60 to-transparent"></div>
+
+    <!-- MAIN MOVIE DECK -->
+    <div class="relative z-10 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-start pt-8">
+      
+      <!-- LEFT: POSTER CARD -->
+      <div class="md:col-span-4 lg:col-span-3 bg-[#0B0A0F] border border-gray-800 rounded-xl overflow-hidden shadow-spidey-glow">
+        <img [src]="movie.posterUrl" [alt]="movie.title" class="w-full h-auto object-cover" />
+      </div>
+
+      <!-- RIGHT: MOVIE INFO & ACTIONS -->
+      <div class="md:col-span-8 lg:col-span-9 space-y-6">
+        
+        <div class="space-y-2">
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="bg-brand-red/10 border border-brand-red/40 text-brand-red text-[10px] px-3 py-0.5 rounded-full font-bold">
+              ★ {{ movie.rating }} / 10
+            </span>
+            <span class="text-xs text-gray-400">{{ movie.releaseYear }} &bull; {{ movie.duration }}</span>
+          </div>
+
+          <h1 class="font-netflix text-4xl sm:text-5xl text-white tracking-wider leading-tight">
+            {{ movie.title }}
+          </h1>
+
+          <p class="text-xs text-brand-red font-semibold tracking-widest">{{ movie.tagline }}</p>
+        </div>
+
+        <!-- GENRE TAGS -->
+        <div class="flex flex-wrap gap-2">
+          <span *ngFor="let genre of movie.genres" class="bg-[#0B0A0F] border border-gray-800 text-gray-300 text-[10px] px-3 py-1 rounded-full">
+            {{ genre }}
+          </span>
+        </div>
+
+        <!-- SYNOPSIS -->
+        <div class="space-y-1">
+          <h3 class="text-xs text-gray-500 uppercase tracking-wider">Synopsis</h3>
+          <p class="text-xs text-gray-300 leading-relaxed max-w-3xl">{{ movie.synopsis }}</p>
+        </div>
+
+        <!-- CREW INFO -->
+        <div class="text-xs space-y-1 border-t border-gray-800/80 pt-4">
+          <p class="text-gray-500">DIRECTED BY: <span class="text-gray-300">{{ movie.director }}</span></p>
+        </div>
+
+        <!-- INTERACTIVE USER ACTIONS -->
+        <div class="pt-4 flex flex-wrap items-center gap-6 border-t border-gray-800/80">
+          
+          <!-- WATCHLIST TOGGLE -->
+          <button 
+            (click)="toggleWatchlist()" 
+            [class.bg-brand-red]="isWatchlisted"
+            [class.text-white]="isWatchlisted"
+            [class.bg-[#0B0A0F]]="!isWatchlisted"
+            class="border border-brand-red/60 text-xs px-5 py-2.5 rounded hover:bg-brand-red hover:text-white transition-all shadow-spidey-glow">
+            {{ isWatchlisted ? '✓ IN WATCHLIST' : '+ ADD TO WATCHLIST' }}
+          </button>
+
+          <!-- STAR RATING WIDGET -->
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-gray-400">YOUR RATING:</span>
+            <div class="flex text-lg">
+              <button 
+                *ngFor="let star of [1, 2, 3, 4, 5]" 
+                (mouseenter)="hoveredStar = star" 
+                (mouseleave)="hoveredStar = movie.userRating || 0"
+                (click)="setRating(star)"
+                class="hover:scale-125 transition-transform focus:outline-none">
+                <span [class.text-brand-red]="star <= hoveredStar" [class.text-gray-700]="star > hoveredStar">★</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- NEO4J GRAPH TRAVERSAL / SIMILAR MOVIES SECTION -->
+  <main class="max-w-7xl mx-auto px-6 py-12 space-y-6">
+    
+    <div class="flex justify-between items-center border-b border-gray-800/80 pb-3">
+      <div>
+        <h3 class="font-netflix text-2xl text-white tracking-wider">GRAPH CONNECTED NODES</h3>
+        <p class="text-[10px] text-gray-500">RECOMMENDED VIA GRAPH TRAVERSAL & AFFINITY WEIGHTS</p>
+      </div>
+      <a routerLink="/recommendations" class="text-xs text-brand-red hover:underline">EXPLORE ALL NODES →</a>
+    </div>
+
+    <!-- RELATED CARDS GRID -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div *ngFor="let rel of graphConnectedMovies" class="bg-[#0B0A0F] border border-gray-800 rounded-lg overflow-hidden hover:border-brand-red/60 transition-all duration-300 group">
+        <div class="aspect-[2/3] relative overflow-hidden">
+          <img [src]="rel.posterUrl" [alt]="rel.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100" />
+          <div class="absolute top-2 right-2 bg-black/80 text-brand-red border border-brand-red/40 px-2 py-0.5 rounded text-[10px] font-bold">
+            {{ rel.affinityScore }}% MATCH
+          </div>
+        </div>
+        <div class="p-3 space-y-1">
+          <h4 class="font-netflix text-sm text-white truncate group-hover:text-brand-red transition-colors">{{ rel.title }}</h4>
+          <p class="text-[9px] text-brand-red/80 truncate">{{ rel.connectionReason }}</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-gray-800/80 bg-[#0B0A0F] py-6 px-6 text-center text-[10px] text-gray-600">
+    ENGINEO GRAPH INFRASTRUCTURE &copy; 2026
+  </footer>
+
+</div>

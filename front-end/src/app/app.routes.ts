@@ -7,6 +7,7 @@ import { CatalogComponent } from './pages/catalog/catalog.component';
 import { RecommendationsComponent } from './pages/recommendations/recommendations.component';
 import { ErrorComponent } from './shared/components/error/error.component';
 import { GraphComponent } from './pages/graph/graph.component';
+import { MovieDetailComponent } from './pages/movie-detail/movie-detail.component';
 
 export const routes: Routes = [
     {
@@ -37,6 +38,7 @@ export const routes: Routes = [
     path :'graph',
     component : GraphComponent,
   },
+  { path: 'movie/:id', component: MovieDetailComponent },
   { path: '401', component: ErrorComponent, data: { code: '401' } },
   { path: '403', component: ErrorComponent, data: { code: '403' } },
   { path: '500', component: ErrorComponent, data: { code: '500' } },
