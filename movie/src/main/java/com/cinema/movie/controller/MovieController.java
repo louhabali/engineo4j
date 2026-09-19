@@ -1,10 +1,12 @@
 package com.cinema.movie.controller;
 
 import com.cinema.movie.dto.MovieResponseDto;
-import com.cinema.movie.service.MovieService;
+
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.cinema.movie.service.*;
 
 import java.util.List;
 
@@ -14,9 +16,11 @@ import java.util.List;
 public class MovieController {
 
     private final MovieService movieService;
+  
 
     public MovieController(MovieService movieService) {
         this.movieService = movieService;
+      
     }
 
     @GetMapping
@@ -28,7 +32,7 @@ public class MovieController {
     public ResponseEntity<List<MovieResponseDto>> getPaginatedMovies(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "8") int size) {
-                
+
         return ResponseEntity.ok(movieService.getPaginatedMovies(page, size));
     }
 
@@ -40,18 +44,14 @@ public class MovieController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<MovieResponseDto>> searchByTitle(@RequestParam String title) {
-        return ResponseEntity.ok(movieService.searchByTitle(title));
-    }
+    public ResponseEntity<List<MovieResponseDto>> searchMovies(
+            @RequestParam(required = false) String query,
+            @RequestParam(required = false) String genre,
+            @RequestParam(required = false) Integer releaseYear,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size) {
 
-    @GetMapping("/filter/genre")
-    public ResponseEntity<List<MovieResponseDto>> filterByGenre(@RequestParam String genre) {
-        return ResponseEntity.ok(movieService.filterByGenre(genre));
+        List<MovieResponseDto> movies = movieService.searchMovies(query, genre, releaseYear, page, size);
+        return ResponseEntity.ok(movies);
     }
-
-    @GetMapping("/filter/year")
-    public ResponseEntity<List<MovieResponseDto>> filterByYear(@RequestParam Integer year) {
-        return ResponseEntity.ok(movieService.filterByYear(year));
-    }
-
 }

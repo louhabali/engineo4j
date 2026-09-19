@@ -7,12 +7,14 @@ import com.cinema.movie.exception.MovieNotFoundException;
 import com.cinema.movie.repository.MovieRepository;
 import com.cinema.movie.service.MovieService;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.cache.annotation.Cacheable;
 
 import org.springframework.data.domain.Pageable;
-
+import org.springframework.data.jpa.domain.Specification;
+import com.cinema.movie.service.MovieSpecifications;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,55 +33,33 @@ public class MovieServiceImpl implements MovieService {
                 .map(this::mapToDto)
                 .toList();
     }
+
     @Override
     @Cacheable(value = "moviesCache", key = "#page + '-' + #size")
     public List<MovieResponseDto> getPaginatedMovies(int page, int size) {
-        System.out.println("Fetching paginated movies from database for page: " + page + ", size: " + size);
         Pageable pageable = PageRequest.of(page, size);
         return movieRepository.findAll(pageable).stream()
                 .map(this::mapToDto)
                 .toList();
     }
+
     @Override
     public MovieResponseDto getMovieById(long movieId) {
         return movieRepository.findById(movieId)
                 .map(this::mapToDto)
                 .orElseThrow(() -> new MovieNotFoundException("Movie not found with ID: " + movieId));
     }
-
     @Override
-    public List<MovieResponseDto> searchByTitle(String title) {
-        return movieRepository.findByTitleContainingIgnoreCase(title).stream()
-                .map(this::mapToDto)
-                .toList();
-    }
+    public List<MovieResponseDto> searchMovies(String title, String genre, Integer releaseYear, int page, int size) {
+    Pageable pageable = PageRequest.of(page, size);
+    Specification<MovieEntity> spec = MovieSpecifications.filterMovies(title, genre, releaseYear);
 
-    @Override
-    public List<MovieResponseDto> filterByGenre(String genre) {
-        return movieRepository.findByGenresContaining(genre).stream()
-                .map(this::mapToDto)
-                .toList();
-    }
+    return movieRepository.findAll(spec, pageable)
+            .stream()
+            .map(this::mapToDto) 
+            .toList();
+}
 
-    @Override
-    public List<MovieResponseDto> filterByYear(Integer year) {
-        return movieRepository.findByReleaseYear(year).stream()
-                .map(this::mapToDto)
-                .toList();
-    }
-
-    @Override
-    public MovieResponseDto createMovie(MovieRequestDto requestDto) {
-        MovieEntity entity = MovieEntity.builder()
-                .movieId(requestDto.getMovieId())
-                .title(requestDto.getTitle())
-                .genres(requestDto.getGenres())
-                .releaseYear(requestDto.getReleaseYear())
-                .averageRating(0.0)
-                .build();
-
-        return mapToDto(movieRepository.save(entity));
-    }
 
     private MovieResponseDto mapToDto(MovieEntity entity) {
         return MovieResponseDto.builder()
