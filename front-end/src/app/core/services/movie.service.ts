@@ -13,7 +13,12 @@ export class MovieService {
   getAllMovies(): Observable<MovieCard[]> {
     return this.http.get<MovieCard[]>(this.baseUrl);
   }
-  
+  getPaginatedMovies(page: number, size: number): Observable<MovieCard[]> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<MovieCard[]>(`${this.baseUrl}/paginated`, { params });
+  }
   getMovieById(id: string | number): Observable<MovieDetail> {
     return this.http.get<MovieDetail>(`${this.baseUrl}/${id}`);
   }
