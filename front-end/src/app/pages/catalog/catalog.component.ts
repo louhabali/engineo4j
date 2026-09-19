@@ -27,7 +27,8 @@ export class CatalogComponent implements OnInit {
   currentPage = 0;
   pageSize = 8;
   isLoading = false;
-  isInitialLoading = true; // Controls 1-second full-screen loader
+  isInitialLoading = true; // Initial full-screen splash loader
+  isFiltering = false;     // Inline search/filter loader that replaces the grid content
   hasMore = true;
 
   private searchSubject = new Subject<string>();
@@ -40,7 +41,7 @@ export class CatalogComponent implements OnInit {
       this.loadMovies(true);
     });
 
-    // Initial load with a polished cinematic splash/spinner delay of 1 second
+    // Initial load delay
     setTimeout(() => {
       this.loadMovies(true);
     }, 2000);
@@ -55,11 +56,16 @@ export class CatalogComponent implements OnInit {
 
     if (isReset) {
       this.currentPage = 0;
-      this.trendingMovies = [];
+      this.trendingMovies = []; // Clear current films immediately so they hide
       this.hasMore = true;
+      
+      if (!this.isInitialLoading) {
+        this.isFiltering = true; // Trigger inline grid loader
+      }
     }
 
     this.isLoading = true;
+    const startTime = Date.now();
 
     this.movieService.getFilteredMovies(
       this.searchQuery,
@@ -81,12 +87,37 @@ export class CatalogComponent implements OnInit {
 
         this.currentPage++;
         this.isLoading = false;
-        this.isInitialLoading = false; // Hide splash loader once data is ready
+
+        // Ensure the inline loader stays visible for at least 1 second (1000ms)
+        if (this.isFiltering) {
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = Math.max(0, 1000 - elapsedTime);
+
+          setTimeout(() => {
+            this.isInitialLoading = false;
+            this.isFiltering = false;
+          }, remainingTime);
+        } else {
+          this.isInitialLoading = false;
+          this.isFiltering = false;
+        }
       },
       error: (err) => {
         console.error('Failed to load filtered movies:', err);
         this.isLoading = false;
-        this.isInitialLoading = false;
+        
+        if (this.isFiltering) {
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = Math.max(0, 1000 - elapsedTime);
+
+          setTimeout(() => {
+            this.isInitialLoading = false;
+            this.isFiltering = false;
+          }, remainingTime);
+        } else {
+          this.isInitialLoading = false;
+          this.isFiltering = false;
+        }
       }
     });
   }

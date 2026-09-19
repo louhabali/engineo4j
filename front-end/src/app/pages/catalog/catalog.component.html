@@ -1,11 +1,8 @@
-<!-- CINEMATIC SPIDER-MAN SPLASH SPINNER -->
+<!-- LOADER 1: INITIAL FULL-SCREEN SPLASH -->
 <div *ngIf="isInitialLoading" class="fixed inset-0 z-50 bg-[#070609] flex flex-col items-center justify-center space-y-6 font-mono select-none">
   <div class="relative flex items-center justify-center">
-    <!-- Outer Pulsing Ring -->
     <div class="absolute w-20 h-20 rounded-full border border-brand-red/20 animate-ping"></div>
-    <!-- Spinning Dark-Red Border -->
     <div class="w-16 h-16 rounded-full border-2 border-gray-800 border-t-brand-red animate-spin shadow-spidey-glow"></div>
-    <!-- Inner Core Dot -->
     <div class="absolute w-3 h-3 bg-brand-red rounded-full shadow-spidey-glow"></div>
   </div>
   <div class="text-center space-y-1">
@@ -14,7 +11,7 @@
   </div>
 </div>
 
-<!-- MAIN PAGE CONTENT (Appears smoothly after loader clears) -->
+<!-- MAIN PAGE CONTENT -->
 <div
   *ngIf="!isInitialLoading"
   class="min-h-screen bg-bg-primary text-gray-200 font-mono overflow-x-hidden selection:bg-brand-red selection:text-white animate-fade-in"
@@ -76,14 +73,11 @@
   <section
     class="relative min-h-[85vh] flex items-end pt-24 pb-16 px-6 md:px-12 overflow-hidden border-b border-gray-800/60"
   >
-    <!-- SPIDER-MAN HERO BACKGROUND -->
     <img
       [src]="heroMovie?.bannerUrl"
       alt="Hero Banner"
       class="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-luminosity select-none"
     />
-
-    <!-- GRADIENT OVERLAYS TO PURE DARK -->
     <div class="absolute inset-0 radial-dark-overlay"></div>
     <div
       class="absolute inset-0 bg-gradient-to-t from-bg-primary via-bg-primary/40 to-transparent"
@@ -92,9 +86,7 @@
       class="absolute inset-0 bg-gradient-to-r from-bg-primary via-transparent to-bg-primary/80"
     ></div>
 
-    <!-- HERO CONTENT -->
     <div class="relative z-10 max-w-3xl space-y-4">
-      <!-- GRAPH ENGINE BADGE -->
       <div
         class="inline-flex items-center gap-2 bg-brand-red/10 border border-brand-red/30 px-3 py-1 rounded-full text-[10px] text-brand-red"
       >
@@ -118,7 +110,6 @@
         {{ heroMovie?.description }}
       </p>
 
-      <!-- CTAs -->
       <div class="flex items-center gap-4 pt-2">
         <a
           routerLink="/recommendations"
@@ -192,7 +183,14 @@
         >
       </div>
 
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+      <!-- LOADER 2: INLINE SEARCH & FILTER (Replaces the grid area directly for 1 second) -->
+      <div *ngIf="isFiltering" class="min-h-[300px] flex flex-col items-center justify-center space-y-3 py-20 bg-[#0B0A0F]/40 border border-gray-800/50 rounded-lg">
+        <div class="w-10 h-10 rounded-full border-2 border-gray-800 border-t-brand-red animate-spin shadow-spidey-glow"></div>
+        <p class="text-xs text-brand-red tracking-widest animate-pulse">QUERYING GRAPH NODES...</p>
+      </div>
+
+      <!-- MOVIES GRID (Hidden while isFiltering is true) -->
+      <div *ngIf="!isFiltering" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         <div
           *ngFor="let movie of trendingMovies"
           [routerLink]="['/movie', movie.id]"
@@ -222,6 +220,11 @@
             </p>
           </div>
         </div>
+      </div>
+
+      <!-- EMPTY STATE -->
+      <div *ngIf="!isFiltering && trendingMovies.length === 0" class="text-center py-16 text-gray-500 text-xs">
+        NO MOVIE NODES FOUND MATCHING YOUR CRITERIA.
       </div>
     </section>
 
