@@ -1,9 +1,27 @@
+<!-- CINEMATIC SPIDER-MAN SPLASH SPINNER -->
+<div *ngIf="isInitialLoading" class="fixed inset-0 z-50 bg-[#070609] flex flex-col items-center justify-center space-y-6 font-mono select-none">
+  <div class="relative flex items-center justify-center">
+    <!-- Outer Pulsing Ring -->
+    <div class="absolute w-20 h-20 rounded-full border border-brand-red/20 animate-ping"></div>
+    <!-- Spinning Dark-Red Border -->
+    <div class="w-16 h-16 rounded-full border-2 border-gray-800 border-t-brand-red animate-spin shadow-spidey-glow"></div>
+    <!-- Inner Core Dot -->
+    <div class="absolute w-3 h-3 bg-brand-red rounded-full shadow-spidey-glow"></div>
+  </div>
+  <div class="text-center space-y-1">
+    <p class="font-netflix text-2xl text-brand-red tracking-widest spidey-glow-text animate-pulse">ENGINEO</p>
+    <p class="text-[10px] text-gray-500 tracking-wider">TRAVERSING NEO4J GRAPH NODES...</p>
+  </div>
+</div>
+
+<!-- MAIN PAGE CONTENT (Appears smoothly after loader clears) -->
 <div
-  class="min-h-screen bg-bg-primary text-gray-200 font-mono overflow-x-hidden selection:bg-brand-red selection:text-white"
+  *ngIf="!isInitialLoading"
+  class="min-h-screen bg-bg-primary text-gray-200 font-mono overflow-x-hidden selection:bg-brand-red selection:text-white animate-fade-in"
 >
   <!-- NAVIGATION BAR -->
   <nav
-    class="fixed top-0 left-0 right-0 z-50 bg-bg-primary/80 backdrop-blur-md border-b border-gray-800/80 px-6 py-4"
+    class="fixed top-0 left-0 right-0 z-50 bg-bg-primary/85 backdrop-blur-md border-b border-gray-800/80 px-6 py-4"
   >
     <div class="max-w-7xl mx-auto flex items-center justify-between">
       <div class="flex items-center gap-8">
@@ -32,7 +50,7 @@
           <input
             type="text"
             [(ngModel)]="searchQuery"
-            (keyup.enter)="onSearch()"
+            (ngModelChange)="onSearchChange()"
             placeholder="Search graph nodes..."
             class="w-full bg-[#0B0A0F] border border-gray-800 focus:border-brand-red text-xs text-gray-200 pl-8 pr-3 py-1.5 rounded outline-none transition-all duration-300"
           />

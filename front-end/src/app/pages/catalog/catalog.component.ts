@@ -1,7 +1,9 @@
-import { Component, OnInit, inject , HostListener} from '@angular/core';
+import { Component, OnInit, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { FeaturedMovie, MovieCard } from '../../models/movie.model';
 import { MovieService } from '../../core/services/movie.service';
 
@@ -16,6 +18,7 @@ export class CatalogComponent implements OnInit {
 
   searchQuery = '';
   selectedGenre = 'ALL';
+  selectedYear?: number;
   heroMovie: FeaturedMovie | null = null;
   genres: string[] = ['ALL', 'ACTION', 'SCI-FI', 'ANIMATION', 'THRILLER', 'DRAMA'];
   trendingMovies: MovieCard[] = [];
@@ -24,31 +27,66 @@ export class CatalogComponent implements OnInit {
   currentPage = 0;
   pageSize = 8;
   isLoading = false;
+  isInitialLoading = true; // Controls 1-second full-screen loader
   hasMore = true;
 
+  private searchSubject = new Subject<string>();
+
   ngOnInit(): void {
-    this.loadMoreMovies();
+    this.searchSubject.pipe(
+      debounceTime(600),
+      distinctUntilChanged()
+    ).subscribe(() => {
+      this.loadMovies(true);
+    });
+
+    // Initial load with a polished cinematic splash/spinner delay of 1 second
+    setTimeout(() => {
+      this.loadMovies(true);
+    }, 2000);
   }
 
-  loadMoreMovies(): void {
-    if (this.isLoading || !this.hasMore) return;
+  onSearchChange(): void {
+    this.searchSubject.next(this.searchQuery);
+  }
+
+  loadMovies(isReset: boolean = false): void {
+    if (this.isLoading || (!this.hasMore && !isReset)) return;
+
+    if (isReset) {
+      this.currentPage = 0;
+      this.trendingMovies = [];
+      this.hasMore = true;
+    }
+
     this.isLoading = true;
 
-    this.movieService.getPaginatedMovies(this.currentPage, this.pageSize).subscribe({
+    this.movieService.getFilteredMovies(
+      this.searchQuery,
+      this.selectedGenre,
+      this.selectedYear,
+      this.currentPage,
+      this.pageSize
+    ).subscribe({
       next: (movies) => {
         if (movies.length < this.pageSize) {
           this.hasMore = false;
         }
+        
         this.trendingMovies = [...this.trendingMovies, ...movies];
-        if (this.currentPage === 0 && movies.length > 0) {
+
+        if (this.currentPage === 0 && movies.length > 0 && !this.heroMovie) {
           this.initHero(movies[0]);
         }
+
         this.currentPage++;
         this.isLoading = false;
+        this.isInitialLoading = false; // Hide splash loader once data is ready
       },
       error: (err) => {
-        console.error('Failed to load paginated movies:', err);
+        console.error('Failed to load filtered movies:', err);
         this.isLoading = false;
+        this.isInitialLoading = false;
       }
     });
   }
@@ -57,9 +95,9 @@ export class CatalogComponent implements OnInit {
   onScroll(): void {
     const scrollPosition = window.innerHeight + window.scrollY;
     const threshold = document.documentElement.scrollHeight - 200;
-    
-    if (scrollPosition >= threshold && !this.isLoading && this.selectedGenre === 'ALL' && !this.searchQuery) {
-      this.loadMoreMovies();
+
+    if (scrollPosition >= threshold && !this.isLoading && this.hasMore) {
+      this.loadMovies(false);
     }
   }
 
@@ -75,35 +113,9 @@ export class CatalogComponent implements OnInit {
       bannerUrl: first.bannerUrl || 'spiderbg.webp'
     };
   }
-  onSearch(): void {
-    if (this.searchQuery.trim()) {
-      this.movieService.searchByTitle(this.searchQuery).subscribe({
-        next: (movies) => {
-          this.trendingMovies = movies;
-        },
-        error: (err) => {
-          console.error('Failed to search movies:', err);
-        }
-      });
-    }
-  }
+
   onGenreSelect(genre: string): void {
     this.selectedGenre = genre;
-    if (this.selectedGenre === 'ALL') {
-      this.currentPage = 0;
-      this.trendingMovies = [];
-      this.hasMore = true;
-      this.loadMoreMovies();
-    } else {
-      this.movieService.filterByGenre(this.selectedGenre).subscribe({
-        next: (movies) => {
-          this.trendingMovies = movies;
-          this.hasMore = false; // Disable infinite scroll for filtered results
-        },
-        error: (err) => {
-          console.error('Failed to filter movies by genre:', err);
-        }
-      }); 
-    }
+    this.loadMovies(true);
   }
 }
