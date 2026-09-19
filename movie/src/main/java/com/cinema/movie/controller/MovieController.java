@@ -24,6 +24,14 @@ public class MovieController {
         return ResponseEntity.ok(movieService.getAllMovies());
     }
 
+    @GetMapping("/paginated")
+    public ResponseEntity<List<MovieResponseDto>> getPaginatedMovies(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size) {
+                
+        return ResponseEntity.ok(movieService.getPaginatedMovies(page, size));
+    }
+
     @GetMapping("/{movieId}")
     public ResponseEntity<MovieResponseDto> getMovieById(@PathVariable String movieId) {
         // convert parameter to int

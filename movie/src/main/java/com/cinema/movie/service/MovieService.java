@@ -12,4 +12,5 @@ public interface MovieService {
     List<MovieResponseDto> filterByGenre(String genre);
     List<MovieResponseDto> filterByYear(Integer year);
     MovieResponseDto createMovie(MovieRequestDto requestDto);
+    List<MovieResponseDto> getPaginatedMovies(int page, int size);
 }

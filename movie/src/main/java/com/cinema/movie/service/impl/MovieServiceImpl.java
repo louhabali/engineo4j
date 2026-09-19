@@ -6,8 +6,14 @@ import com.cinema.movie.entity.MovieEntity;
 import com.cinema.movie.exception.MovieNotFoundException;
 import com.cinema.movie.repository.MovieRepository;
 import com.cinema.movie.service.MovieService;
-import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+import org.springframework.cache.annotation.Cacheable;
+
+import org.springframework.data.domain.Pageable;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,7 +31,15 @@ public class MovieServiceImpl implements MovieService {
                 .map(this::mapToDto)
                 .toList();
     }
-    
+    @Override
+    @Cacheable(value = "moviesCache", key = "#page + '-' + #size")
+    public List<MovieResponseDto> getPaginatedMovies(int page, int size) {
+        System.out.println("Fetching paginated movies from database for page: " + page + ", size: " + size);
+        Pageable pageable = PageRequest.of(page, size);
+        return movieRepository.findAll(pageable).stream()
+                .map(this::mapToDto)
+                .toList();
+    }
     @Override
     public MovieResponseDto getMovieById(long movieId) {
         return movieRepository.findById(movieId)
@@ -76,7 +90,7 @@ public class MovieServiceImpl implements MovieService {
                 .tagline(entity.getTagline())
                 .duration(entity.getDuration())
                 .director(entity.getDirector())
-                .genres(entity.getGenres())
+                .genres(entity.getGenres() != null ? new ArrayList<>(entity.getGenres()) : null)
                 .releaseYear(entity.getReleaseYear())
                 .averageRating(entity.getAverageRating())
                 .bannerUrl(entity.getBannerUrl())
