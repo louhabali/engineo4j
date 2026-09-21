@@ -9,6 +9,7 @@ import { RouterModule, RouterLink } from '@angular/router';
   templateUrl: './landing.component.html',
 })
 export class LandingComponent {
+  isMenuOpen = false;
   features = [
     { title: 'NEO4J GRAPH DATABASE', desc: 'Real-time collaborative filtering & high-speed relationship traversal.' },
     { title: 'SPRING BOOT & KAFKA & REST', desc: 'Microservices architecture connected via asynchronous event streams , rest apis.' },

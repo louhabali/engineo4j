@@ -16,62 +16,132 @@
   *ngIf="!isInitialLoading"
   class="min-h-screen bg-bg-primary text-gray-200 font-mono overflow-x-hidden selection:bg-brand-red selection:text-white animate-fade-in"
 >
-  <!-- NAVIGATION BAR -->
-  <nav
-    class="fixed top-0 left-0 right-0 z-50 bg-bg-primary/85 backdrop-blur-md border-b border-gray-800/80 px-6 py-4"
-  >
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
-      <div class="flex items-center gap-8">
-        <a
-          routerLink="/"
-          class="font-netflix text-3xl text-brand-red tracking-wider spidey-glow-text"
-          >ENGINEO</a
-        >
-        <div class="hidden md:flex items-center gap-6 text-xs text-gray-400">
-          <a
-            routerLink="/catalog"
-            class="text-white hover:text-brand-red transition-colors"
-            >DISCOVER</a
-          >
-          <a
-            routerLink="/profile"
-            class="hover:text-brand-red transition-colors"
-            >MY PROFILE</a
-          >
-        </div>
+  <!-- FIXED NAVBAR -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-bg-primary/90 backdrop-blur-md flex justify-between items-center py-4 px-6 md:px-16 border-b border-gray-800/60 animate-fade-in-up">
+    <!-- LEFT GROUP: LOGO + ADJACENT NAV LINKS -->
+    <div class="flex items-center gap-10">
+      <!-- LOGO -->
+      <div routerLink="/" class="font-netflix text-3xl text-brand-red tracking-wider spidey-glow-text cursor-pointer">
+        ENGINEO
+      </div>
+      
+      <!-- DESKTOP NAV LINKS (CLOSE TO LOGO) -->
+      <div class="hidden md:flex items-center gap-6 text-xs font-semibold tracking-wider text-gray-400">
+        <a routerLink="/recommendations" class="hover:text-brand-red transition-colors duration-300">RECOMMENDATIONS</a>
+        <a routerLink="/profile" class="hover:text-brand-red transition-colors duration-300">MY PROFILE</a>
+      </div>
+    </div>
+
+    <!-- DESKTOP SEARCH & AUTH BUTTONS -->
+    <div class="hidden md:flex items-center gap-4">
+      <div class="relative w-48 lg:w-56">
+        <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="onSearchChange()"
+          placeholder="Search graph nodes..."
+          class="w-full bg-[#0B0A0F] border border-gray-800 focus:border-brand-red text-xs text-gray-200 pl-8 pr-3 py-1.5 outline-none transition-all duration-300"
+        />
       </div>
 
-      <!-- SEARCH BAR & AUTH BUTTONS -->
-      <div class="flex items-center gap-4">
-        <div class="relative hidden sm:block w-48 lg:w-64">
-          <input
-            type="text"
-            [(ngModel)]="searchQuery"
-            (ngModelChange)="onSearchChange()"
-            placeholder="Search graph nodes..."
-            class="w-full bg-[#0B0A0F] border border-gray-800 focus:border-brand-red text-xs text-gray-200 pl-8 pr-3 py-1.5 rounded outline-none transition-all duration-300"
-          />
-        </div>
+      <a routerLink="/login" class="bg-brand-red hover:bg-brand-red-glow text-white font-netflix text-base px-5 py-2 shadow-spidey-glow hover:scale-105 transition-all duration-300">
+        AUTHENTICATE
+      </a>
+    </div>
 
-        <a
-          routerLink="/login"
-          class="text-xs text-gray-300 hover:text-white px-3 py-1.5 transition-colors"
+    <!-- MOBILE CONTROLS -->
+    <div class="md:hidden flex items-center gap-2">
+      <!-- MOBILE SEARCH TOGGLE BUTTON -->
+      <button
+        (click)="toggleSearch()"
+        type="button"
+        class="p-2 border border-gray-800 bg-[#0B0A0F] text-gray-300 hover:text-brand-red hover:border-brand-red/50 transition-colors"
+        aria-label="Toggle Search"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+      </button>
+
+      <!-- MOBILE MENU TOGGLE BUTTON -->
+      <button 
+        (click)="toggleMenu()" 
+        type="button"
+        class="flex items-center gap-2 px-3 py-1.5 border border-brand-red/50 bg-brand-red/10 text-white font-semibold text-xs rounded hover:bg-brand-red/20 focus:outline-none transition-all duration-300 shadow-spidey-glow"
+        aria-label="Toggle Menu"
+      >
+        <span class="font-netflix tracking-wider">MENU</span>
+        <svg class="w-4 h-4 fill-current text-brand-red" viewBox="0 0 24 24">
+          <path *ngIf="!isMenuOpen" d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/>
+          <path *ngIf="isMenuOpen" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- MOBILE EXPANDABLE SEARCH BAR -->
+    <div 
+      *ngIf="isSearchOpen" 
+      class="absolute top-full left-0 w-full bg-bg-secondary/100 backdrop-blur-md border-b border-brand-red/30 p-4 md:hidden animate-fade-in-down z-30"
+    >
+      <div class="relative w-full">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-red pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="onSearchChange()"
+          placeholder="Search graph nodes..."
+          class="w-full bg-[#0B0A0F] border border-brand-red/60 focus:border-brand-red text-xs text-gray-200 pl-9 pr-8 py-2 outline-none shadow-spidey-glow transition-all"
+        />
+        <button 
+          *ngIf="searchQuery"
+          (click)="searchQuery = ''; onSearchChange()"
+          class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-xs"
         >
-          SIGN IN
-        </a>
-        <a
-          routerLink="/register"
-          class="text-xs bg-brand-red hover:bg-brand-red-glow text-white font-netflix px-4 py-1.5 rounded shadow-spidey-glow hover:scale-[1.02] transition-all"
-        >
-          CREATE NODE
-        </a>
+          ✕
+        </button>
       </div>
+    </div>
+
+    <!-- MOBILE DROPDOWN MENU -->
+    <div 
+      *ngIf="isMenuOpen" 
+      class="absolute top-full left-0 w-full bg-bg-secondary/100 backdrop-blur-md border-b border-brand-red/30 p-5 flex flex-col gap-4 text-xs font-semibold tracking-wider text-gray-300 shadow-2xl md:hidden animate-fade-in-down z-30"
+    >
+      <a 
+        routerLink="/recommendations" 
+        (click)="isMenuOpen = false" 
+        class="hover:text-brand-red transition-colors py-1.5 border-b border-gray-800/60"
+      >
+        RECOMMENDATIONS
+      </a>
+
+      <a 
+        routerLink="/profile" 
+        (click)="isMenuOpen = false" 
+        class="hover:text-brand-red transition-colors py-1.5 border-b border-gray-800/60"
+      >
+        MY PROFILE
+      </a>
+      
+      <!-- MOBILE LAUNCH APP BUTTON -->
+      <a 
+        routerLink="/login" 
+        (click)="isMenuOpen = false" 
+        class="bg-brand-red hover:bg-brand-red-glow text-white font-netflix text-center text-sm py-2.5 mt-2 shadow-spidey-glow transition-all duration-300"
+      >
+        AUTHENTICATE 
+      </a>
     </div>
   </nav>
 
-  <!-- HERO SECTION WITH FULL BLEED BACKGROUND & GRADIENT FADE -->
+  <!-- HERO SECTION WITH TOP PADDING FOR FIXED NAVBAR -->
   <section
-    class="relative min-h-[85vh] flex items-end pt-24 pb-16 px-6 md:px-12 overflow-hidden border-b border-gray-800/60"
+    class="relative min-h-[85vh] flex items-end pt-32 pb-16 px-6 md:px-16 overflow-hidden border-b border-gray-800/60"
   >
     <img
       [src]="heroMovie?.bannerUrl"
@@ -113,13 +183,13 @@
       <div class="flex items-center gap-4 pt-2">
         <a
           routerLink="/recommendations"
-          class="bg-brand-red hover:bg-brand-red-glow text-white font-netflix text-base px-6 py-2.5 rounded shadow-spidey-glow hover:scale-[1.02] transition-all flex items-center gap-2"
+          class="bg-brand-red hover:bg-brand-red-glow text-white font-netflix text-base px-6 py-2.5 shadow-spidey-glow hover:scale-[1.02] transition-all flex items-center gap-2"
         >
           <span>▶</span> EXPLORE RECOMMENDATIONS
         </a>
         <a
           routerLink="/graph"
-          class="bg-[#0B0A0F] border border-gray-800 hover:border-gray-600 text-gray-300 text-xs px-5 py-3 rounded transition-all"
+          class="bg-[#0B0A0F] border border-gray-800 hover:border-gray-600 text-gray-300 text-xs px-5 py-3 transition-all"
         >
           VIEW TRAVERSE GRAPH
         </a>
@@ -129,7 +199,7 @@
 
   <!-- LIVE GRAPH METRICS STRIP -->
   <section
-    class="bg-[#0B0A0F] border-b border-gray-800/80 py-4 px-6 text-xs text-gray-400"
+    class="bg-[#0B0A0F] border-b border-gray-800/80 py-4 px-6 md:px-16 text-xs text-gray-400"
   >
     <div
       class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-center"
@@ -154,7 +224,7 @@
   </section>
 
   <!-- MAIN CATALOG & CAROUSELS -->
-  <main class="max-w-7xl mx-auto px-6 py-12 space-y-12">
+  <main class="max-w-7xl mx-auto px-6 md:px-16 py-12 space-y-12">
     <!-- GENRE FILTER BUTTONS -->
     <div class="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-none">
       <button
@@ -164,7 +234,7 @@
         [class.text-white]="selectedGenre === genre"
         [class.bg-[#0B0A0F]]="selectedGenre !== genre"
         [class.text-gray-400]="selectedGenre !== genre"
-        class="border border-gray-800 hover:border-brand-red/50 text-xs px-4 py-1.5 rounded-full transition-all whitespace-nowrap"
+        class="border border-gray-800 hover:border-brand-red/50 text-xs px-4 py-1.5 transition-all whitespace-nowrap"
       >
         {{ genre }}
       </button>
@@ -183,13 +253,13 @@
         >
       </div>
 
-      <!-- LOADER 2: INLINE SEARCH & FILTER (Replaces the grid area directly for 1 second) -->
+      <!-- LOADER 2: INLINE SEARCH & FILTER -->
       <div *ngIf="isFiltering" class="min-h-[300px] flex flex-col items-center justify-center space-y-3 py-20 bg-[#0B0A0F]/40 border border-gray-800/50 rounded-lg">
         <div class="w-10 h-10 rounded-full border-2 border-gray-800 border-t-brand-red animate-spin shadow-spidey-glow"></div>
         <p class="text-xs text-brand-red tracking-widest animate-pulse">QUERYING GRAPH NODES...</p>
       </div>
 
-      <!-- MOVIES GRID (Hidden while isFiltering is true) -->
+      <!-- MOVIES GRID -->
       <div *ngIf="!isFiltering" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         <div
           *ngFor="let movie of trendingMovies"
@@ -276,7 +346,7 @@
 
   <!-- FOOTER -->
   <footer
-    class="border-t border-gray-800/80 bg-[#0B0A0F] py-8 px-6 text-center text-[10px] text-gray-600 space-y-2"
+    class="border-t border-gray-800/80 bg-[#0B0A0F] py-8 px-6 md:px-16 text-center text-[10px] text-gray-600 space-y-2"
   >
     <p class="font-netflix text-sm text-brand-red spidey-glow-text">ENGINEO</p>
     <p>POWERED BY NEO4J, SPRING BOOT MICROSERVICES & ANGULAR</p>

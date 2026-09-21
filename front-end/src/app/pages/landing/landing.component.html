@@ -5,26 +5,65 @@
     <img 
       src="spiderbg.webp" 
       alt="Spider-Man Background" 
-      class="w-full h-full object-cover object-center opacity-40 mix-blend-luminosity scale-105 animate-upside-down-float"
+      class="w-full h-full object-cover object-center opacity-20 mix-blend-luminosity scale-105 animate-upside-down-float"
     />
     <div class="absolute inset-0 radial-dark-overlay"></div>
   </div>
 
   <!-- NAVBAR -->
-  <nav class="relative z-10 flex justify-between items-center py-5 border-b border-gray-800/40 animate-fade-in-up">
+  <nav class="relative z-20 flex justify-between items-center py-5 border-b border-gray-800/40 animate-fade-in-up">
     <div class="font-netflix text-3xl text-brand-red tracking-wider spidey-glow-text cursor-pointer">
       ENGINEO
     </div>
     
+    <!-- DESKTOP NAV LINKS -->
     <div class="hidden md:flex gap-8 text-xs font-semibold tracking-wider text-gray-400">
       <a routerLink="/catalog" class="hover:text-brand-red transition-colors duration-300">MOVIES</a>
-      <a routerLink="/recommendations" class="hover:text-brand-red transition-colors duration-300">RECOMMENDATIONS</a>
+    
       <a routerLink="/graph" class="hover:text-brand-red transition-colors duration-300">GRAPH ARCHITECTURE</a>
     </div>
 
-    <a routerLink="/login" class="bg-brand-red hover:bg-brand-red-glow text-white font-netflix text-base px-5 py-2 shadow-spidey-glow hover:scale-105 transition-all duration-300">
-      LAUNCH APP
-    </a>
+
+
+    <!-- MOBILE MENU TOGGLE BUTTON -->
+    <button 
+      (click)="isMenuOpen = !isMenuOpen" 
+      type="button"
+      class="md:hidden flex items-center gap-2 px-3 py-1.5 border border-brand-red/50 bg-brand-red/10 text-white font-semibold text-xs rounded hover:bg-brand-red/20 focus:outline-none transition-all duration-300 shadow-spidey-glow"
+      aria-label="Toggle Menu"
+    >
+      <span class="font-netflix tracking-wider">MENU</span>
+      <!-- Hamburger / Close Icon Toggle -->
+      <svg class="w-4 h-4 fill-current text-brand-red" viewBox="0 0 24 24">
+        <path *ngIf="!isMenuOpen" d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/>
+        <path *ngIf="isMenuOpen" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+      </svg>
+    </button>
+
+    <!-- MOBILE DROPDOWN MENU -->
+    <div 
+      *ngIf="isMenuOpen" 
+      class="absolute top-full left-0 w-full bg-bg-secondary/100 backdrop-blur-md border-b border-brand-red/30 p-5 flex flex-col gap-4 text-xs font-semibold tracking-wider text-gray-300 shadow-2xl md:hidden animate-fade-in-down z-30"
+    >
+    
+      <a 
+        routerLink="/catalog" 
+        (click)="isMenuOpen = false" 
+        class="hover:text-brand-red transition-colors py-1.5 border-b border-gray-800/60"
+      >
+        MOVIES
+      </a>
+      <a 
+        routerLink="/graph" 
+        (click)="isMenuOpen = false" 
+        class="hover:text-brand-red transition-colors py-1.5 border-b border-gray-800/60"
+      >
+        GRAPH ARCHITECTURE
+      </a>
+      
+      <!-- MOBILE LAUNCH APP BUTTON -->
+  
+    </div>
   </nav>
 
   <!-- HERO SECTION -->
@@ -55,77 +94,6 @@
           <span>EXPLORE ARCHITECTURE</span>
           <span class="group-hover:translate-x-1 transition-transform duration-300">→</span>
         </a>
-      </div>
-    </div>
-
-    <!-- RIGHT VISUAL TERMINAL CARD -->
-    <div class="lg:col-span-5 flex justify-center lg:justify-end animate-fade-in-up">
-      <div class="relative w-full max-w-md bg-[#0B0A0F] border border-red-900/50 rounded-lg shadow-spidey-glow overflow-hidden font-mono text-xs">
-        
-        <!-- GLOW EFFECTS & OVERLAYS -->
-        <div class="absolute -top-16 -right-16 w-44 h-44 bg-brand-red/10 rounded-full blur-3xl pointer-events-none animate-glow-pulse"></div>
-        <div class="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_50%,rgba(0,0,0,0.3)_50%)] bg-[length:100%_4px] pointer-events-none opacity-40"></div>
-
-        <!-- TERMINAL HEADER BAR -->
-        <div class="flex items-center justify-between px-4 py-2 bg-[#14121B] border-b border-red-900/40 select-none">
-          <div class="flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full bg-brand-red/80 inline-block shadow-[0_0_8px_#E50914]"></span>
-            <span class="ml-2 text-[10px] text-gray-400 font-semibold tracking-wider flex items-center gap-1.5">
-              <span class="text-brand-red"></span> cypher-shell — engineo&#64;neo4j:~$
-            </span>
-          </div>
-          <span class="text-[9px] text-red-400/90 bg-red-900/10 border border-red-900/30 px-2 py-0.5 rounded font-mono">
-            LATENCY: 0.42ms
-          </span>
-        </div>
-
-        <!-- TERMINAL BODY / CODE CONTENT -->
-        <div class="p-4 space-y-2 text-gray-300 leading-relaxed relative z-10 text-[11px]">
-          <div class="space-y-1 bg-[#070609] p-3 rounded border border-red-950/80">
-            <p class="text-gray-400">
-              <span class="text-brand-red font-bold">MATCH</span> 
-              (u:<span class="text-amber-400">User</span> {{ '{' }}id: <span class="text-emerald-400">"usr_991"</span>{{ '}' }})-[r1:<span class="text-brand-cyan">RATED</span>]-&gt;(m:<span class="text-amber-400">Movie</span>)
-            </p>
-            <p class="text-gray-400">
-              <span class="text-brand-red font-bold">WHERE</span> 
-              r1.score &gt;= <span class="text-purple-400">4.5</span>
-            </p>
-            <p class="text-gray-400">
-              <span class="text-brand-red font-bold">MATCH</span> 
-              (other:<span class="text-amber-400">User</span>)-[r2:<span class="text-brand-cyan">RATED</span>]-&gt;(rec:<span class="text-amber-400">Movie</span>)
-            </p>
-            <p class="text-gray-400">
-              <span class="text-brand-red font-bold">WHERE NOT</span> 
-              (u)-[:<span class="text-brand-cyan">RATED</span>]-&gt;(rec)
-            </p>
-            <p class="text-gray-400">
-              <span class="text-brand-red font-bold">RETURN</span> 
-              rec.title, <span class="text-brand-red font-bold">AVG</span>(r2.score) <span class="text-brand-red font-bold">AS</span> score
-            </p>
-            <p class="text-gray-400">
-              <span class="text-brand-red font-bold">ORDER BY</span> score <span class="text-brand-red font-bold">DESC LIMIT</span> <span class="text-purple-400">5</span>;
-            </p>
-          </div>
-
-          <!-- TERMINAL PROMPT / CURSOR -->
-          <div class="flex items-center gap-2 text-[11px] pt-1 text-emerald-400">
-            <span class="text-brand-red font-bold">&gt;</span>
-            <span class="text-gray-400">executing traversal graph query...</span>
-            <span class="w-2 h-3.5 bg-brand-red animate-pulse inline-block"></span>
-          </div>
-        </div>
-
-        <!-- TERMINAL FOOTER / STATUS BAR -->
-        <div class="flex items-center justify-between px-4 py-1.5 bg-[#0E0D13] border-t border-red-900/30 text-[10px]">
-          <div class="flex items-center gap-2">
-            <span class="w-1.5 h-1.5 rounded-full bg-red-800 animate-ping"></span>
-            <span class="text-red-400 font-semibold tracking-wider">CLUSTER READY</span>
-          </div>
-          <div class="text-gray-500">
-            NODES: <span class="text-gray-300">1.2M</span> | EDGES: <span class="text-gray-300">8.4M</span>
-          </div>
-        </div>
-
       </div>
     </div>
 

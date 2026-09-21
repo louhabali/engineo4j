@@ -30,7 +30,8 @@ export class CatalogComponent implements OnInit {
   isInitialLoading = true; // Initial full-screen splash loader
   isFiltering = false;     // Inline search/filter loader that replaces the grid content
   hasMore = true;
-
+  isMenuOpen = false;
+  isSearchOpen = false;
   private searchSubject = new Subject<string>();
 
   ngOnInit(): void {
@@ -45,6 +46,21 @@ export class CatalogComponent implements OnInit {
     setTimeout(() => {
       this.loadMovies(true);
     }, 2000);
+  }
+
+  // TOGGLE HANDLERS FOR MOBILE UI
+  toggleSearch(): void {
+    this.isSearchOpen = !this.isSearchOpen;
+    if (this.isSearchOpen) {
+      this.isMenuOpen = false;
+    }
+  }
+
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
+    if (this.isMenuOpen) {
+      this.isSearchOpen = false;
+    }
   }
 
   onSearchChange(): void {
