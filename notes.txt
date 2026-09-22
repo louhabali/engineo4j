@@ -5,3 +5,4 @@ WHERE NOT (u)-[:RATED]->(rec) AND r3.rating >= 4.0
 RETURN rec.id AS id, rec.title AS title, rec.genre AS genre, AVG(r3.rating) AS predictedRating
 ORDER BY predictedRating DESC
 LIMIT 10    
+
