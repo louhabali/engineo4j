@@ -1,5 +1,6 @@
 package com.cinema.gateway.filter;
 
+import io.micrometer.tracing.Tracer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -12,19 +13,26 @@ import reactor.core.publisher.Mono;
 @Component
 public class LoggingFilter implements GlobalFilter, Ordered {
 
+    private final Tracer tracer;
+
+    public LoggingFilter(Tracer tracer) {
+        this.tracer = tracer;
+    }
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        long startTime = System.currentTimeMillis();
+        long start = System.currentTimeMillis();
         String path = exchange.getRequest().getURI().getPath();
         String method = exchange.getRequest().getMethod().name();
 
+        String traceId = (tracer.currentSpan() != null) ? tracer.currentSpan().context().traceId() : "N/A";
+
         return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-            long duration = System.currentTimeMillis() - startTime;
-            int statusCode = exchange.getResponse().getStatusCode() != null 
-                    ? exchange.getResponse().getStatusCode().value() 
-                    : 500;
+            long duration = System.currentTimeMillis() - start;
+            int status = exchange.getResponse().getStatusCode() != null 
+                    ? exchange.getResponse().getStatusCode().value() : 500;
             
-            log.info("{} {} | Status: {} | Time: {}ms", method, path, statusCode, duration);
+            log.info("[Trace: {}] {} {} -> Status: {} [{}ms]", traceId, method, path, status, duration);
         }));
     }
 

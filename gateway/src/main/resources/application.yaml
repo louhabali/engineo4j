@@ -43,3 +43,7 @@ logging:
     root: INFO
     com.cinema.gateway: DEBUG
     org.springframework.cloud.gateway: INFO
+management:
+  tracing:
+    sampling:
+      probability: 1.0
