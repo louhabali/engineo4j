@@ -2,9 +2,12 @@ package com.cinema.user.service.auth;
 
 import dev.samstevens.totp.code.CodeVerifier;
 import dev.samstevens.totp.code.DefaultCodeVerifier;
+import dev.samstevens.totp.qr.QrData;
 import dev.samstevens.totp.code.DefaultCodeGenerator;
 import dev.samstevens.totp.secret.DefaultSecretGenerator;
 import dev.samstevens.totp.secret.SecretGenerator;
+import dev.samstevens.totp.time.SystemTimeProvider;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,7 +19,9 @@ public class TotpService {
     public TotpService() {
         this.secretGenerator = new DefaultSecretGenerator();
         // this.codeVerifier = new DefaultCodeVerifier(new DefaultCodeGenerator());
-        this.codeVerifier = new DefaultCodeVerifier(new DefaultCodeGenerator(), null);
+        // this.codeVerifier = new DefaultCodeVerifier(new DefaultCodeGenerator(),
+        // null);
+        this.codeVerifier = new DefaultCodeVerifier(new DefaultCodeGenerator(), new SystemTimeProvider());
     }
 
     /**
@@ -48,4 +53,12 @@ public class TotpService {
     public boolean verifyCode(String secret, String code) {
         return codeVerifier.isValidCode(secret, code);
     }
+
+    // public QrData generateQrData(String email, String secret) {
+    // return new QrData.Builder()
+    // .label(email)
+    // .secret(secret)
+    // .issuer("User Service")
+    // .build();
+    // }
 }

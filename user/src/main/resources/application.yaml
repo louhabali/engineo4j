@@ -23,6 +23,9 @@ spring:
     redis:
       host: localhost
       port: 6379
+jwt:
+  secret: change-this-to-a-long-random-secret-key-at-least-32-bytes
+  expiration: 86400000
 logging:
   level:
     root: INFO

@@ -18,9 +18,10 @@ import io.jsonwebtoken.JwtException;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     // 1. Combine DTO validation errors into one clean global string
@@ -28,7 +29,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleValidationErrors(MethodArgumentNotValidException ex) {
         String combinedErrors = ex.getBindingResult().getFieldErrors().stream()
                 .map(FieldError::getDefaultMessage)
-                .collect(Collectors.joining(". ")); // Joins messages nicely: "Username is required. Invalid email format."
+                .collect(Collectors.joining(". ")); // Joins messages nicely: "Username is required. Invalid email
+                                                    // format."
 
         return ResponseEntity.badRequest().body(new ErrorResponse(combinedErrors));
     }
@@ -95,9 +97,18 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.METHOD_NOT_ALLOWED)
                 .body(new ErrorResponse("HTTP method " + ex.getMethod() + " is not allowed for this endpoint."));
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(ex.getMessage()));
+    }
+
     // @ExceptionHandler(IllegalArgumentException.class)
-    // public ResponseEntity<ErrorResponse> (HttpRequestMethodNotSupportedException ex) {
-        
+    // public ResponseEntity<ErrorResponse> (HttpRequestMethodNotSupportedException
+    // ex) {
+
     // }
 
     // 9. Catch-all for unexpected exceptions
