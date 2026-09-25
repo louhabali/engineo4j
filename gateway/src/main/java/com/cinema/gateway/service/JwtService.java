@@ -23,7 +23,7 @@ public class JwtService {
         try {
             Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
             return true;
-        } catch (JwtException | IllegalArgumentException e) {
+        } catch (JwtException | Ille e) {
             return false;
         }
     }

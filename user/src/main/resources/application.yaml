@@ -24,7 +24,7 @@ spring:
       host: localhost
       port: 6379
 jwt:
-  secret: change-this-to-a-long-random-secret-key-at-least-32-bytes
+  secret: ${JWT_SECRET:your_super_secret_key_that_is_at_least_32_bytes_long}
   expiration: 86400000
 logging:
   level:

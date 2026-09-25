@@ -105,7 +105,7 @@ public class AuthService {
             throw new IllegalArgumentException("Invalid MFA code");
         }
 
-        String token = jwtService.generateToken(user.getEmail());
+        String token = jwtService.generateToken(user);
 
         return new AuthResponse(token);
     }
