@@ -3,9 +3,9 @@ server:
 
 spring:
   application:
-    name: movie
+    name: movie-service
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/movie_db}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://neo4flix-postgres:5432/movie_db}
     username: ${SPRING_DATASOURCE_USERNAME:pgadmin}
     password: ${SPRING_DATASOURCE_PASSWORD:pgpass}
     driver-class-name: org.postgresql.Driver
@@ -21,8 +21,9 @@ spring:
     type: redis
   data:
     redis:
-      host: localhost
-      port: 6379
+      host: ${SPRING_DATA_REDIS_HOST:movie_redis}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+
 logging:
   level:
     root: INFO
