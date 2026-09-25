@@ -1,3 +1,25 @@
+server:
+  port: 8084
+
 spring:
   application:
-    name: recommendation
+    name: recommendation-service
+  neo4j:
+    uri: ${SPRING_NEO4J_URI:bolt://neo4flix-neo4j:7687}
+    authentication:
+      username: ${SPRING_NEO4J_USERNAME:neo4j}
+      password: ${SPRING_NEO4J_PASSWORD:password}
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:movie_kafka:29092}
+    consumer:
+      group-id: recommendation-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
+logging:
+  level:
+    root: INFO
+    com.cinema.recommendation: DEBUG
