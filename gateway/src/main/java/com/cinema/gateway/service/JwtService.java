@@ -23,7 +23,7 @@ public class JwtService {
         try {
             Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
             return true;
-        } catch (JwtException | IllegalArgumentException e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -38,5 +38,8 @@ public class JwtService {
 
     public String extractUserId(String token) {
         return getClaims(token).getSubject();
+    }
+    public String extractEmail(String token) {
+        return getClaims(token).get("email", String.class);
     }
 }

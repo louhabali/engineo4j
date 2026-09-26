@@ -1,15 +1,14 @@
-package com.cinema.gateway;
+package com.cinema.user;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
 @SpringBootApplication
-public class GatewayApplication {
+public class UserApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(GatewayApplication.class, args);
-		System.out.println("gateway running on port 8089");
+		SpringApplication.run(UserApplication.class, args);
+		System.out.println("service running on port : 8081");
 	}
 
 }

@@ -32,7 +32,7 @@ public class LoggingFilter implements GlobalFilter, Ordered {
             int status = exchange.getResponse().getStatusCode() != null 
                     ? exchange.getResponse().getStatusCode().value() : 500;
             
-            log.info("[Trace: {}] {} {} -> Status: {} [{}ms]", traceId, method, path, status, duration);
+            //log.info("[Trace: {}] {} {} -> Status: {} [{}ms]", traceId, method, path, status, duration);
         }));
     }
 

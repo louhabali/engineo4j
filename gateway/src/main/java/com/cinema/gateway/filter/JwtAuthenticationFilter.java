@@ -20,9 +20,10 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
     private static final List<String> PUBLIC_ENDPOINTS = List.of(
             "/api/v1/auth/login",
             "/api/v1/auth/register",
-            "/api/v1/movies/public"
+            "/api/v1/movies/public",
+            "/api/v1/auth/mfa/verify"
     );
-
+    
     private final JwtService jwtService;
     private final TokenBlacklistService tokenBlacklistService;
 
@@ -56,8 +57,11 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
                     }
 
                     String userId = jwtService.extractUserId(token);
+                    String email = jwtService.extractEmail(token);
+                    
                     ServerHttpRequest mutatedRequest = request.mutate()
                             .header("X-User-Id", userId)
+                            .header("X-User-Email", email)
                             .build();
 
                     return chain.filter(exchange.mutate().request(mutatedRequest).build());
