@@ -82,7 +82,7 @@ public class DataInitializer implements CommandLineRunner {
             String title = titles.get(i);
             List<String> genres = genrePool.get(random.nextInt(genrePool.size()));
             int releaseYear = 1970 + random.nextInt(55);
-            double rating = Math.round((3.5 + random.nextDouble() * 1.5) * 10.0) / 10.0;
+            double rating = 0.0;
             
             String posterUrl = getSpecificPoster(title);
             String bannerUrl = getSpecificBanner(title);
