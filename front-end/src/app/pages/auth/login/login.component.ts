@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { UserService } from '../../../core/services/user.service';
+import { MfaLoginRequest } from '../../../models/user.model';
 
 @Component({
   selector: 'app-login',
@@ -12,20 +14,37 @@ import { Router, RouterLink } from '@angular/router';
 export class LoginComponent {
   email = '';
   password = '';
+  code = ''; // 2FA Code field
   errorMessage = '';
+  isLoading = false;
 
-  constructor(private router: Router) {}
+  constructor(private userService: UserService, private router: Router) {}
 
   onLogin(): void {
-    if (!this.email || !this.password) {
-      this.errorMessage = 'Please provide valid credentials.';
+    if (!this.email || !this.password || !this.code) {
+      this.errorMessage = 'Please provide your email, password, and 6-digit MFA code.';
       return;
     }
 
-    // TODO: Connect to backend Spring Boot JWT authentication endpoint
-    console.log('Logging in user:', { email: this.email });
+    this.isLoading = true;
+    this.errorMessage = '';
 
-    // Navigate to catalog or recommendations on success
-    this.router.navigate(['/catalog']);
+    const payload: MfaLoginRequest = {
+      email: this.email,
+      password: this.password,
+      code: this.code
+    };
+
+    this.userService.login(payload).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        console.log('Login successful, token securely cached.');
+        this.router.navigate(['/catalog']); // Redirect to home/catalog view
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.errorMessage = err.error?.message || 'Authentication failed. Check your credentials or MFA code.';
+      }
+    });
   }
 }

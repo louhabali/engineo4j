@@ -2,12 +2,12 @@ package com.cinema.user.service.auth;
 
 import dev.samstevens.totp.code.CodeVerifier;
 import dev.samstevens.totp.code.DefaultCodeVerifier;
-import dev.samstevens.totp.qr.QrData;
 import dev.samstevens.totp.code.DefaultCodeGenerator;
+import dev.samstevens.totp.code.HashingAlgorithm;
+import dev.samstevens.totp.qr.QrData;
 import dev.samstevens.totp.secret.DefaultSecretGenerator;
 import dev.samstevens.totp.secret.SecretGenerator;
 import dev.samstevens.totp.time.SystemTimeProvider;
-
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,9 +18,6 @@ public class TotpService {
 
     public TotpService() {
         this.secretGenerator = new DefaultSecretGenerator();
-        // this.codeVerifier = new DefaultCodeVerifier(new DefaultCodeGenerator());
-        // this.codeVerifier = new DefaultCodeVerifier(new DefaultCodeGenerator(),
-        // null);
         this.codeVerifier = new DefaultCodeVerifier(new DefaultCodeGenerator(), new SystemTimeProvider());
     }
 
@@ -32,19 +29,19 @@ public class TotpService {
     }
 
     /**
-     * Builds the URI understood by Google Authenticator
-     * and other authenticator applications.
+     * Builds a fully compliant otpauth URI using the library's QrData builder.
      */
     public String generateOtpAuthUri(String email, String secret) {
+        QrData data = new QrData.Builder()
+                .label(email)
+                .secret(secret)
+                .issuer("UserService")
+                .algorithm(HashingAlgorithm.SHA1) // Google Authenticator requires SHA1
+                .digits(6)                        // Standard 6-digit codes
+                .period(30)                       // Refreshes every 30 seconds
+                .build();
 
-        String issuer = "UserService";
-
-        return String.format(
-                "otpauth://totp/%s:%s?secret=%s&issuer=%s",
-                issuer,
-                email,
-                secret,
-                issuer);
+        return data.getUri();
     }
 
     /**
@@ -53,12 +50,4 @@ public class TotpService {
     public boolean verifyCode(String secret, String code) {
         return codeVerifier.isValidCode(secret, code);
     }
-
-    // public QrData generateQrData(String email, String secret) {
-    // return new QrData.Builder()
-    // .label(email)
-    // .secret(secret)
-    // .issuer("User Service")
-    // .build();
-    // }
 }
