@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
         }
 
         String token = authHeader.substring(7);
-
+       
         return tokenBlacklistService.isBlacklisted(token)
                 .flatMap(isBlacklisted -> {
                     if (Boolean.TRUE.equals(isBlacklisted) || !jwtService.validateToken(token)) {
@@ -63,7 +63,7 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
                             .header("X-User-Id", userId)
                             .header("X-User-Email", email)
                             .build();
-
+                    System.out.println("User ID: " + userId + ", Email: " + email);
                     return chain.filter(exchange.mutate().request(mutatedRequest).build());
                 });
     }

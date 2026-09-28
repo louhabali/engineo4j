@@ -1,7 +1,6 @@
 package com.cinema.gateway.service;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,10 +35,14 @@ public class JwtService {
                 .getPayload();
     }
 
+    // Extracts userId from Claims set by Auth Service
     public String extractUserId(String token) {
-        return getClaims(token).getSubject();
+        Object userId = getClaims(token).get("userId");
+        return userId != null ? userId.toString() : null;
     }
+
+    // Extracts email from Claims set by Auth Service
     public String extractEmail(String token) {
-        return getClaims(token).get("email", String.class);
+        return getClaims(token).getSubject();
     }
 }

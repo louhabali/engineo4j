@@ -6,9 +6,11 @@ import {
   RegisterRequest,
   RegisterResponse,
   MfaVerifyRequest,
+  MfaVerifyResponse,
   MfaLoginRequest,
   AuthResponse,
-  MfaVerifyResponse
+  UserProfile,
+  UserProfileUpdateRequest
 } from '../../models/user.model';
 
 @Injectable({
@@ -16,34 +18,49 @@ import {
 })
 export class UserService {
 
-  private apiUrl = 'http://localhost:8089/api/v1/auth';
+  private readonly apiUrl = 'http://localhost:8089/api/v1';
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   register(data: RegisterRequest): Observable<RegisterResponse> {
     return this.http.post<RegisterResponse>(
-      `${this.apiUrl}/register`,
+      `${this.apiUrl}/auth/register`,
       data
     );
   }
 
   verifyMfa(data: MfaVerifyRequest): Observable<MfaVerifyResponse> {
     return this.http.post<MfaVerifyResponse>(
-      `${this.apiUrl}/mfa/verify`,
+      `${this.apiUrl}/auth/mfa/verify`,
       data
     );
   }
 
   login(data: MfaLoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(
-      `${this.apiUrl}/login`,
+      `${this.apiUrl}/auth/login`,
       data
     ).pipe(
-      tap(response => {
-        if (response?.token) {
+      tap((response: AuthResponse) => {
+        if (response.token) {
           localStorage.setItem('auth_token', response.token);
         }
       })
+    );
+  }
+
+  getUserProfile(): Observable<UserProfile> {
+    return this.http.get<UserProfile>(
+      `${this.apiUrl}/users/profile`
+    );
+  }
+
+  updateUserProfile(
+    profile: UserProfileUpdateRequest
+  ): Observable<UserProfile> {
+    return this.http.put<UserProfile>(
+      `${this.apiUrl}/users/profile`,
+      profile
     );
   }
 

@@ -6,7 +6,7 @@ export interface RegisterRequest {
 
 export interface RegisterResponse {
   email: string;
-    otpAuthUri: string; // Changed from qrCodeImageUri
+  otpAuthUri: string;
 }
 
 export interface MfaVerifyRequest {
@@ -27,4 +27,18 @@ export interface MfaLoginRequest {
 export interface AuthResponse {
   token: string;
   tokenType: string;
+}
+
+export interface UserProfile {
+  fullName: string;
+  email: string;
+  memberSince: string;
+  totalWatchlist: number;
+  totalFavorites: number;
+  totalRatings: number;
+}
+
+export interface UserProfileUpdateRequest {
+  fullName: string;
+  email: string;
 }
