@@ -10,7 +10,9 @@ import {
   MfaLoginRequest,
   AuthResponse,
   UserProfile,
-  UserProfileUpdateRequest
+  UserProfileUpdateRequest,
+  WatchlistItem,
+  WatchlistStatusResponse
 } from '../../models/user.model';
 
 @Injectable({
@@ -21,6 +23,8 @@ export class UserService {
   private readonly apiUrl = 'http://localhost:8089/api/v1';
 
   constructor(private readonly http: HttpClient) {}
+
+  // --- Authentication ---
 
   register(data: RegisterRequest): Observable<RegisterResponse> {
     return this.http.post<RegisterResponse>(
@@ -49,6 +53,8 @@ export class UserService {
     );
   }
 
+  // --- User Profile ---
+
   getUserProfile(): Observable<UserProfile> {
     return this.http.get<UserProfile>(
       `${this.apiUrl}/users/profile`
@@ -63,6 +69,42 @@ export class UserService {
       profile
     );
   }
+
+  // --- Watchlist ---
+
+  getWatchlistMovieIds(): Observable<number[]> {
+    return this.http.get<number[]>(
+      `${this.apiUrl}/users/watchlist`
+    );
+  }
+
+  getWatchlistItems(): Observable<WatchlistItem[]> {
+    return this.http.get<WatchlistItem[]>(
+      `${this.apiUrl}/users/watchlist/items`
+    );
+  }
+
+  addToWatchlist(movieId: number): Observable<void> {
+    return this.http.post<void>(
+      `${this.apiUrl}/users/watchlist/${movieId}`,
+      {}
+    );
+  }
+
+  removeFromWatchlist(movieId: number): Observable<void> {
+    return this.http.delete<void>(
+      `${this.apiUrl}/users/watchlist/${movieId}`
+    );
+  }
+
+isInWatchlist(movieId: number): Observable<boolean> {
+  return this.http.get<boolean>(
+    `${this.apiUrl}/users/watchlist/check/${movieId}`
+  );
+}
+
+
+  // --- Auth Helpers ---
 
   getToken(): string | null {
     return localStorage.getItem('auth_token');

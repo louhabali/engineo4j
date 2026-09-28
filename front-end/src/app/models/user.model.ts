@@ -42,3 +42,19 @@ export interface UserProfileUpdateRequest {
   fullName: string;
   email: string;
 }
+
+export interface WatchlistItem {
+  id: number;
+  userId: number;
+  movieId: number;
+  addedAt: string;
+}
+
+export interface WatchlistRequest {
+  movieId: number;
+}
+
+export interface WatchlistStatusResponse {
+  movieId: number;
+  inWatchlist: boolean;
+}

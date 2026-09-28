@@ -1,8 +1,14 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { MovieDetail, RelatedGraphMovie } from '../../models/movie.model';
-import { MovieService } from '../../core/services/movie.service'; 
+
+import {
+  MovieDetail,
+  RelatedGraphMovie
+} from '../../models/movie.model';
+
+import { MovieService } from '../../core/services/movie.service';
+import { UserService } from '../../core/services/user.service';
 
 @Component({
   selector: 'app-movie-detail',
@@ -11,12 +17,16 @@ import { MovieService } from '../../core/services/movie.service';
   templateUrl: './movie-detail.component.html'
 })
 export class MovieDetailComponent implements OnInit {
+
   private route = inject(ActivatedRoute);
   private movieService = inject(MovieService);
+  private userService = inject(UserService);
 
-  movieId!: string | number;
+  movieId!: number;
+
   hoveredStar = 0;
   isWatchlisted = false;
+  isWatchlistLoading = false;
 
   movie: MovieDetail = {
     id: 0,
@@ -36,17 +46,30 @@ export class MovieDetailComponent implements OnInit {
   graphConnectedMovies: RelatedGraphMovie[] = [];
 
   ngOnInit(): void {
-    // Grab the ID from the route
     const idParam = this.route.snapshot.paramMap.get('id');
-    if (idParam) {
-      this.movieId = idParam;
-      this.fetchMovieDetails(this.movieId);
-      this.fetchGraphRecommendations(this.movieId);
+
+    if (!idParam) {
+      console.error('Movie ID not found in route');
+      return;
     }
+
+    this.movieId = Number(idParam);
+
+    if (isNaN(this.movieId)) {
+      console.error('Invalid movie ID:', idParam);
+      return;
+    }
+
+    this.fetchMovieDetails(this.movieId);
+    this.fetchGraphRecommendations(this.movieId);
+    this.checkWatchlistStatus(this.movieId);
   }
 
-  fetchMovieDetails(id: string | number): void {
+  // --------------------------------------------------
+  // Movie Details
+  // --------------------------------------------------
 
+  fetchMovieDetails(id: number): void {
     this.movieService.getMovieById(id).subscribe({
       next: (data) => {
         this.movie = data;
@@ -58,8 +81,11 @@ export class MovieDetailComponent implements OnInit {
     });
   }
 
-  fetchGraphRecommendations(id: string | number): void {
+  // --------------------------------------------------
+  // Graph Recommendations
+  // --------------------------------------------------
 
+  fetchGraphRecommendations(id: number): void {
     this.movieService.getGraphRecommendations(id).subscribe({
       next: (data) => {
         this.graphConnectedMovies = data;
@@ -70,14 +96,112 @@ export class MovieDetailComponent implements OnInit {
     });
   }
 
-  toggleWatchlist(): void {
-    this.isWatchlisted = !this.isWatchlisted;
-    
+  // --------------------------------------------------
+  // Watchlist
+  // --------------------------------------------------
+
+  checkWatchlistStatus(movieId: number): void {
+
+    if (!this.userService.isAuthenticated()) {
+      this.isWatchlisted = false;
+      return;
+    }
+
+    this.userService.isInWatchlist(movieId).subscribe({
+      next: (response) => {
+
+      
+        this.isWatchlisted = response;
+      },
+
+      error: (err) => {
+        console.error(
+          'Failed to check watchlist status:',
+          err
+        );
+
+        this.isWatchlisted = false;
+      }
+    });
   }
+
+  toggleWatchlist(): void {
+
+    if (!this.userService.isAuthenticated()) {
+      console.warn('User must be authenticated to use the watchlist');
+      return;
+    }
+
+    if (this.isWatchlistLoading) {
+      return;
+    }
+
+    this.isWatchlistLoading = true;
+
+    if (this.isWatchlisted) {
+      this.removeFromWatchlist();
+    } else {
+      this.addToWatchlist();
+    }
+  }
+
+  private addToWatchlist(): void {
+
+    this.userService.addToWatchlist(this.movieId).subscribe({
+      next: () => {
+        this.isWatchlisted = true;
+        this.isWatchlistLoading = false;
+
+        console.log(
+          `Movie ${this.movieId} added to watchlist`
+        );
+      },
+
+      error: (err) => {
+        this.isWatchlistLoading = false;
+
+        console.error(
+          'Failed to add movie to watchlist:',
+          err
+        );
+      }
+    });
+  }
+
+  private removeFromWatchlist(): void {
+
+    this.userService.removeFromWatchlist(this.movieId).subscribe({
+      next: () => {
+        this.isWatchlisted = false;
+        this.isWatchlistLoading = false;
+
+        console.log(
+          `Movie ${this.movieId} removed from watchlist`
+        );
+      },
+
+      error: (err) => {
+        this.isWatchlistLoading = false;
+
+        console.error(
+          'Failed to remove movie from watchlist:',
+          err
+        );
+      }
+    });
+  }
+
+  // --------------------------------------------------
+  // Rating
+  // --------------------------------------------------
 
   setRating(rating: number): void {
     this.movie.userRating = rating;
-    console.log(`Updated rating for movie ${this.movieId} to ${rating} stars`);
-    // TODO: Send user rating update to backend API
+
+    console.log(
+      `Updated rating for movie ${this.movieId} to ${rating} stars`
+    );
+
+    // TODO: Send rating update to backend
   }
 }
