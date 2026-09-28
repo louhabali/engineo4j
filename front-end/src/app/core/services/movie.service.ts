@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import {
   FeaturedMovie,
   MovieCard,
@@ -58,6 +58,9 @@ getFilteredMovies(
 
     return this.http.get<MovieCard[]>(`${this.baseUrl}/search`, { params });
   }
-
+  getMoviesByIds(ids: number[]): Observable<Array<MovieCard>> {
+    if (!ids || ids.length === 0) return of([]);
+    return this.http.post<Array<MovieCard>>(`${this.baseUrl}/batch`, { ids });
+  }
 
 }

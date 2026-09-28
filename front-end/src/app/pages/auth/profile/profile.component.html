@@ -1,12 +1,14 @@
 <div
-  class="relative min-h-screen grid grid-cols-1 lg:grid-cols-12 bg-bg-primary overflow-hidden font-mono"
+  class="relative min-h-screen grid grid-cols-1 lg:grid-cols-12
+         bg-bg-primary overflow-hidden font-mono"
 >
 
   <!-- =========================================================
        LEFT PANEL
        ========================================================= -->
   <div
-    class="lg:col-span-4 relative flex flex-col justify-between p-6 md:p-8
+    class="lg:col-span-4 relative flex flex-col justify-between
+           p-6 md:p-8
            border-b lg:border-b-0 lg:border-r border-gray-800/60
            overflow-hidden select-none"
   >
@@ -15,7 +17,8 @@
     <img
       src="spiderbg.webp"
       alt="Spider-Man Background"
-      class="absolute inset-0 w-full h-full object-cover opacity-25 mix-blend-luminosity"
+      class="absolute inset-0 w-full h-full object-cover
+             opacity-25 mix-blend-luminosity"
     />
 
     <div class="absolute inset-0 radial-dark-overlay"></div>
@@ -25,17 +28,22 @@
              from-transparent via-transparent to-bg-primary"
     ></div>
 
+
     <!-- =======================================================
          HEADER
          ======================================================= -->
     <div
-      class="relative z-10 flex items-center justify-between lg:block"
+      class="relative z-10 flex items-center
+             justify-between lg:block"
     >
+
       <div>
+
         <a
           routerLink="/"
-          class="font-netflix text-3xl md:text-4xl text-brand-red
-                 tracking-wider spidey-glow-text"
+          class="font-netflix text-3xl md:text-4xl
+                 text-brand-red tracking-wider
+                 spidey-glow-text"
         >
           ENGINEO
         </a>
@@ -43,33 +51,45 @@
         <p class="text-[10px] text-gray-500 mt-0.5">
           CINEMA GRAPH INFRASTRUCTURE
         </p>
+
       </div>
+
 
       <!-- MOBILE LOGOUT -->
       <button
         type="button"
         (click)="onLogout()"
-        class="lg:hidden text-xs text-brand-red border border-brand-red/40
-               px-3 py-1 rounded hover:bg-brand-red/10 transition-colors"
+        class="lg:hidden text-xs text-brand-red
+               border border-brand-red/40
+               px-3 py-1 rounded
+               hover:bg-brand-red/10
+               transition-colors"
       >
         LOGOUT
       </button>
+
     </div>
+
 
     <!-- =======================================================
          USER PROFILE CARD
          ======================================================= -->
     <div
-      class="relative z-10 my-6 lg:my-auto text-center space-y-4
+      class="relative z-10 my-6 lg:my-auto
+             text-center space-y-4
              max-w-xs mx-auto w-full"
     >
 
       <!-- AVATAR -->
       <div
-        class="relative w-20 h-20 md:w-24 md:h-24 mx-auto rounded-full
-               bg-brand-red/10 border-2 border-brand-red
-               flex items-center justify-center shadow-spidey-glow"
+        class="relative w-20 h-20 md:w-24 md:h-24
+               mx-auto rounded-full
+               bg-brand-red/10
+               border-2 border-brand-red
+               flex items-center justify-center
+               shadow-spidey-glow"
       >
+
         <span
           *ngIf="user.fullName"
           class="font-netflix text-3xl md:text-4xl text-white"
@@ -83,10 +103,13 @@
         >
           ?
         </span>
+
       </div>
+
 
       <!-- USER INFORMATION -->
       <div>
+
         <h2
           class="font-netflix text-2xl text-white tracking-wide"
         >
@@ -99,13 +122,18 @@
 
         <span
           *ngIf="user.memberSince"
-          class="inline-block mt-2 px-2.5 py-0.5
-                 bg-brand-red/10 border border-brand-red/30
-                 text-brand-red text-[10px] rounded-full"
+          class="inline-block mt-2
+                 px-2.5 py-0.5
+                 bg-brand-red/10
+                 border border-brand-red/30
+                 text-brand-red text-[10px]
+                 rounded-full"
         >
           MEMBER SINCE {{ user.memberSince }}
         </span>
+
       </div>
+
 
       <!-- =====================================================
            METRICS
@@ -117,7 +145,8 @@
 
         <!-- WATCHLIST -->
         <div
-          class="bg-[#0B0A0F]/80 p-2.5 rounded border border-gray-800"
+          class="bg-[#0B0A0F]/80 p-2.5
+                 rounded border border-gray-800"
         >
           <p class="font-netflix text-lg text-brand-red">
             {{ user.totalWatchlist }}
@@ -128,9 +157,11 @@
           </p>
         </div>
 
+
         <!-- FAVORITES -->
         <div
-          class="bg-[#0B0A0F]/80 p-2.5 rounded border border-gray-800"
+          class="bg-[#0B0A0F]/80 p-2.5
+                 rounded border border-gray-800"
         >
           <p class="font-netflix text-lg text-brand-red">
             {{ user.totalFavorites }}
@@ -141,9 +172,11 @@
           </p>
         </div>
 
+
         <!-- RATINGS -->
         <div
-          class="bg-[#0B0A0F]/80 p-2.5 rounded border border-gray-800"
+          class="bg-[#0B0A0F]/80 p-2.5
+                 rounded border border-gray-800"
         >
           <p class="font-netflix text-lg text-brand-red">
             {{ user.totalRatings }}
@@ -155,18 +188,26 @@
         </div>
 
       </div>
+
     </div>
+
 
     <!-- =======================================================
          DESKTOP FOOTER NAVIGATION
          ======================================================= -->
     <div
-      class="relative z-10 pt-4 border-t border-gray-800/60
-             hidden lg:flex items-center justify-between text-xs"
+      class="relative z-10 pt-4
+             border-t border-gray-800/60
+             hidden lg:flex
+             items-center justify-between
+             text-xs"
     >
+
       <a
         routerLink="/catalog"
-        class="text-gray-400 hover:text-white transition-colors"
+        class="text-gray-400
+               hover:text-white
+               transition-colors"
       >
         ← CATALOG
       </a>
@@ -178,6 +219,7 @@
       >
         LOGOUT SESSION
       </button>
+
     </div>
 
   </div>
@@ -187,8 +229,10 @@
        RIGHT PANEL
        ========================================================= -->
   <div
-    class="lg:col-span-8 flex flex-col justify-between p-6 md:p-10
-           z-10 bg-bg-primary overflow-y-auto"
+    class="lg:col-span-8 flex flex-col
+           justify-between p-6 md:p-10
+           z-10 bg-bg-primary
+           overflow-y-auto"
   >
 
     <!-- =======================================================
@@ -198,7 +242,8 @@
 
       <div
         class="flex items-center gap-3 md:gap-6
-               border-b border-gray-800 pb-3 overflow-x-auto"
+               border-b border-gray-800
+               pb-3 overflow-x-auto"
       >
 
         <!-- WATCHLIST -->
@@ -208,12 +253,18 @@
           [class.text-brand-red]="activeTab === 'watchlist'"
           [class.border-b-2]="activeTab === 'watchlist'"
           [class.border-brand-red]="activeTab === 'watchlist'"
-          class="font-netflix text-base md:text-xl text-gray-400
-                 hover:text-white transition-all pb-1 tracking-wider
+          class="font-netflix
+                 text-base md:text-xl
+                 text-gray-400
+                 hover:text-white
+                 transition-all
+                 pb-1
+                 tracking-wider
                  whitespace-nowrap"
         >
           MY WATCHLIST
         </button>
+
 
         <!-- FAVORITES -->
         <button
@@ -222,12 +273,18 @@
           [class.text-brand-red]="activeTab === 'favorites'"
           [class.border-b-2]="activeTab === 'favorites'"
           [class.border-brand-red]="activeTab === 'favorites'"
-          class="font-netflix text-base md:text-xl text-gray-400
-                 hover:text-white transition-all pb-1 tracking-wider
+          class="font-netflix
+                 text-base md:text-xl
+                 text-gray-400
+                 hover:text-white
+                 transition-all
+                 pb-1
+                 tracking-wider
                  whitespace-nowrap"
         >
           FAVORITES
         </button>
+
 
         <!-- SETTINGS -->
         <button
@@ -236,9 +293,15 @@
           [class.text-brand-red]="activeTab === 'settings'"
           [class.border-b-2]="activeTab === 'settings'"
           [class.border-brand-red]="activeTab === 'settings'"
-          class="font-netflix text-base md:text-xl text-gray-400
-                 hover:text-white transition-all pb-1 tracking-wider
-                 ml-auto whitespace-nowrap"
+          class="font-netflix
+                 text-base md:text-xl
+                 text-gray-400
+                 hover:text-white
+                 transition-all
+                 pb-1
+                 tracking-wider
+                 ml-auto
+                 whitespace-nowrap"
         >
           SETTINGS
         </button>
@@ -253,116 +316,258 @@
          ======================================================= -->
     <div class="my-6">
 
+
       <!-- =====================================================
-           LOADING STATE
+           PROFILE LOADING
            ===================================================== -->
       <div
         *ngIf="isLoading"
         class="py-16 text-center"
       >
+
         <div
-          class="inline-block w-8 h-8 border-2 border-gray-700
-                 border-t-brand-red rounded-full animate-spin"
+          class="inline-block
+                 w-8 h-8
+                 border-2 border-gray-700
+                 border-t-brand-red
+                 rounded-full
+                 animate-spin"
         ></div>
 
         <p class="mt-4 text-xs text-gray-500">
           LOADING PROFILE NODE...
         </p>
+
       </div>
 
 
       <!-- =====================================================
-           ERROR MESSAGE
+           GLOBAL ERROR
            ===================================================== -->
       <div
         *ngIf="errorMessage && !isLoading"
-        class="mb-6 bg-red-500/10 border border-red-500/40
-               text-red-400 px-4 py-3 rounded text-xs"
+        class="mb-6
+               bg-red-500/10
+               border border-red-500/40
+               text-red-400
+               px-4 py-3
+               rounded
+               text-xs"
       >
         {{ errorMessage }}
       </div>
 
 
       <!-- =====================================================
-           TAB 1: WATCHLIST
+           WATCHLIST TAB
            ===================================================== -->
       <div
         *ngIf="activeTab === 'watchlist' && !isLoading"
-        class="space-y-4"
+        class="space-y-5"
       >
 
-        <div class="flex justify-between items-center">
+        <!-- HEADER -->
+        <div
+          class="flex items-center justify-between"
+        >
+
           <div>
-            <p class="text-xs text-gray-400">
-              QUEUED MOVIES FOR YOUR RECOMMENDATION FEED
+
+            <h3
+              class="font-netflix
+                     text-2xl
+                     text-white
+                     tracking-wider"
+            >
+              MY WATCHLIST
+            </h3>
+
+            <p class="text-xs text-gray-400 mt-1">
+              MOVIES SAVED TO YOUR PERSONAL QUEUE
             </p>
 
-            <p
-              *ngIf="watchlist.length > 0"
-              class="text-[10px] text-gray-600 mt-1"
-            >
-              {{ watchlist.length }} MOVIES IN QUEUE
-            </p>
           </div>
+
+
+          <!-- COUNT -->
+          <div
+            class="bg-brand-red/10
+                   border border-brand-red/30
+                   text-brand-red
+                   px-3 py-1
+                   rounded-full
+                   text-[10px]"
+          >
+            {{ watchlist.length }} MOVIES
+          </div>
+
         </div>
 
 
-        <!-- WATCHLIST GRID -->
+        <!-- ===================================================
+             WATCHLIST LOADING
+             =================================================== -->
         <div
-          *ngIf="watchlist.length > 0"
-          class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"
+          *ngIf="isLoadingWatchlist"
+          class="py-16 text-center"
+        >
+
+          <div
+            class="inline-block
+                   w-8 h-8
+                   border-2 border-gray-700
+                   border-t-brand-red
+                   rounded-full
+                   animate-spin"
+          ></div>
+
+          <p class="mt-4 text-xs text-gray-500">
+            LOADING WATCHLIST...
+          </p>
+
+        </div>
+
+
+        <!-- ===================================================
+             WATCHLIST GRID
+             =================================================== -->
+        <div
+          *ngIf="!isLoadingWatchlist && watchlist.length > 0"
+          class="grid
+                 grid-cols-2
+                 sm:grid-cols-3
+                 lg:grid-cols-4
+                 gap-4"
         >
 
           <div
             *ngFor="let item of watchlist"
-            [routerLink]="['/movie', item.id]"
-            class="group relative bg-[#0B0A0F]
-                   border border-gray-800/80 rounded-lg overflow-hidden
-                   hover:border-brand-red/60 transition-all duration-300
-                   cursor-pointer"
+            class="group relative
+                   bg-[#0B0A0F]
+                   border border-gray-800/80
+                   rounded-lg
+                   overflow-hidden
+                   hover:border-brand-red/60
+                   transition-all duration-300"
           >
 
-            <!-- POSTER -->
+            <!-- CLICKABLE MOVIE AREA -->
             <div
-              class="aspect-[2/3] overflow-hidden relative"
+              [routerLink]="['/movie', +item.id]"
+              class="cursor-pointer"
             >
 
-              <img
-                [src]="item.posterUrl"
-                [alt]="item.title"
-                loading="lazy"
-                class="w-full h-full object-cover
-                       group-hover:scale-105 transition-transform
-                       duration-500 opacity-90
-                       group-hover:opacity-100"
-              />
-
-              <!-- RATING -->
+              <!-- POSTER -->
               <div
-                class="absolute top-2 right-2
-                       bg-black/80 text-brand-red
-                       border border-brand-red/40
-                       px-2 py-0.5 rounded text-[10px] font-bold"
+                class="aspect-[2/3]
+                       overflow-hidden
+                       relative"
               >
-                ★ {{ item.rating }}
+
+                <img
+                  [src]="item.posterUrl"
+                  [alt]="item.title"
+                  loading="lazy"
+                  class="w-full h-full
+                         object-cover
+                         group-hover:scale-105
+                         transition-transform
+                         duration-500
+                         opacity-90
+                         group-hover:opacity-100"
+                />
+
+
+                <!-- RATING -->
+                <div
+                  *ngIf="item.averageRating !== null &&
+                         item.averageRating !== undefined"
+                  class="absolute
+                         top-2 left-2
+                         bg-black/80
+                         text-brand-red
+                         border border-brand-red/40
+                         px-2 py-0.5
+                         rounded
+                         text-[10px]
+                         font-bold"
+                >
+                  ★ {{ item.averageRating }}
+                </div>
+
+
+                <!-- REMOVE BUTTON -->
+                <button
+                  type="button"
+                  (click)="removeFromWatchlist(+item.id, $event)"
+                  class="absolute
+                         top-2 right-2
+                         w-7 h-7
+                         flex items-center justify-center
+                         bg-black/80
+                         border border-gray-700
+                         text-gray-300
+                         rounded-full
+                         opacity-0
+                         group-hover:opacity-100
+                         hover:bg-brand-red
+                         hover:border-brand-red
+                         hover:text-white
+                         transition-all duration-200"
+                  title="Remove from watchlist"
+                  aria-label="Remove from watchlist"
+                >
+                  ×
+                </button>
+
               </div>
 
-            </div>
 
-            <!-- MOVIE INFO -->
-            <div class="p-3">
+              <!-- MOVIE INFORMATION -->
+              <div class="p-3 space-y-1">
 
-              <h4
-                class="font-netflix text-sm text-white truncate
-                       group-hover:text-brand-red transition-colors"
-                [title]="item.title"
-              >
-                {{ item.title }}
-              </h4>
+                <h4
+                  class="font-netflix
+                         text-sm
+                         text-white
+                         truncate
+                         group-hover:text-brand-red
+                         transition-colors"
+                  [title]="item.title"
+                >
+                  {{ item.title }}
+                </h4>
 
-              <p class="text-[10px] text-gray-500 mt-0.5">
-                {{ item.genre }} &bull; {{ item.year }}
-              </p>
+
+                <!-- YEAR -->
+                <p
+                  *ngIf="item.releaseYear"
+                  class="text-[10px] text-gray-500"
+                >
+                  {{ item.releaseYear }}
+                </p>
+
+
+                <!-- GENRES -->
+                <div
+                  *ngIf="item.genres?.length"
+                  class="flex flex-wrap gap-1 pt-1"
+                >
+
+                  <span
+                    *ngFor="let genre of item.genres | slice:0:2"
+                    class="text-[8px]
+                           text-gray-500
+                           border border-gray-800
+                           px-1.5 py-0.5
+                           rounded"
+                  >
+                    {{ genre }}
+                  </span>
+
+                </div>
+
+              </div>
 
             </div>
 
@@ -371,139 +576,131 @@
         </div>
 
 
-        <!-- EMPTY WATCHLIST -->
+        <!-- ===================================================
+             EMPTY WATCHLIST
+             =================================================== -->
         <div
-          *ngIf="watchlist.length === 0"
-          class="py-16 text-center border border-dashed
-                 border-gray-800 rounded-lg"
+          *ngIf="!isLoadingWatchlist && watchlist.length === 0"
+          class="py-16
+                 text-center
+                 border border-dashed
+                 border-gray-800
+                 rounded-lg"
         >
-          <p class="font-netflix text-lg text-gray-500">
+
+          <div
+            class="w-14 h-14
+                   mx-auto
+                   rounded-full
+                   bg-brand-red/10
+                   border border-brand-red/30
+                   flex items-center justify-center"
+          >
+            <span
+              class="text-brand-red text-xl"
+            >
+              +
+            </span>
+          </div>
+
+
+          <p
+            class="font-netflix
+                   text-lg
+                   text-gray-500
+                   mt-4"
+          >
             WATCHLIST EMPTY
           </p>
 
-          <p class="text-xs text-gray-600 mt-2">
+
+          <p
+            class="text-xs
+                   text-gray-600
+                   mt-2"
+          >
             Add movies to your watchlist from the catalog.
           </p>
 
+
           <a
             routerLink="/catalog"
-            class="inline-block mt-5 text-xs text-brand-red
-                   border border-brand-red/40 px-4 py-2 rounded
-                   hover:bg-brand-red/10 transition-colors"
+            class="inline-block
+                   mt-5
+                   text-xs
+                   text-brand-red
+                   border border-brand-red/40
+                   px-4 py-2
+                   rounded
+                   hover:bg-brand-red/10
+                   transition-colors"
           >
             BROWSE CATALOG
           </a>
+
         </div>
 
       </div>
 
 
       <!-- =====================================================
-           TAB 2: FAVORITES
+           FAVORITES TAB
            ===================================================== -->
       <div
         *ngIf="activeTab === 'favorites' && !isLoading"
         class="space-y-4"
       >
 
-        <p class="text-xs text-gray-400">
-          HIGHEST AFFINITY NODES IN YOUR PROFILE
-        </p>
+        <div>
 
-
-        <!-- FAVORITES GRID -->
-        <div
-          *ngIf="favorites.length > 0"
-          class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"
-        >
-
-          <div
-            *ngFor="let item of favorites"
-            [routerLink]="['/movie', item.id]"
-            class="group relative bg-[#0B0A0F]
-                   border border-gray-800/80 rounded-lg overflow-hidden
-                   hover:border-brand-red/60 transition-all duration-300
-                   cursor-pointer"
+          <h3
+            class="font-netflix
+                   text-2xl
+                   text-white
+                   tracking-wider"
           >
+            FAVORITES
+          </h3>
 
-            <!-- POSTER -->
-            <div
-              class="aspect-[2/3] overflow-hidden relative"
-            >
-
-              <img
-                [src]="item.posterUrl"
-                [alt]="item.title"
-                loading="lazy"
-                class="w-full h-full object-cover
-                       group-hover:scale-105 transition-transform
-                       duration-500 opacity-90
-                       group-hover:opacity-100"
-              />
-
-              <!-- RATING -->
-              <div
-                class="absolute top-2 right-2
-                       bg-black/80 text-brand-red
-                       border border-brand-red/40
-                       px-2 py-0.5 rounded text-[10px] font-bold"
-              >
-                ★ {{ item.rating }}
-              </div>
-
-            </div>
-
-            <!-- MOVIE INFO -->
-            <div class="p-3">
-
-              <h4
-                class="font-netflix text-sm text-white truncate
-                       group-hover:text-brand-red transition-colors"
-                [title]="item.title"
-              >
-                {{ item.title }}
-              </h4>
-
-              <p class="text-[10px] text-gray-500 mt-0.5">
-                {{ item.genre }} &bull; {{ item.year }}
-              </p>
-
-            </div>
-
-          </div>
+          <p class="text-xs text-gray-400 mt-1">
+            YOUR FAVORITE MOVIES
+          </p>
 
         </div>
 
 
-        <!-- EMPTY FAVORITES -->
+        <!-- FAVORITES PLACEHOLDER -->
         <div
-          *ngIf="favorites.length === 0"
-          class="py-16 text-center border border-dashed
-                 border-gray-800 rounded-lg"
+          class="py-16
+                 text-center
+                 border border-dashed
+                 border-gray-800
+                 rounded-lg"
         >
-          <p class="font-netflix text-lg text-gray-500">
+
+          <p
+            class="font-netflix
+                   text-lg
+                   text-gray-500"
+          >
             NO FAVORITES YET
           </p>
 
-          <p class="text-xs text-gray-600 mt-2">
-            Movies you mark as favorites will appear here.
+          <p
+            class="text-xs
+                   text-gray-600
+                   mt-2"
+          >
+            Your favorite movies will appear here.
           </p>
 
-          <a
-            routerLink="/catalog"
-            class="inline-block mt-5 text-xs text-brand-red
-                   border border-brand-red/40 px-4 py-2 rounded
-                   hover:bg-brand-red/10 transition-colors"
-          >
-            BROWSE CATALOG
-          </a>
         </div>
 
       </div>
 
 
       <!-- =====================================================
-           TAB 3: SETTINGS
+           SETTINGS TAB
            ===================================================== -->
       <div
         *ngIf="activeTab === 'settings' && !isLoading"
@@ -514,7 +711,10 @@
         <div class="space-y-1">
 
           <h3
-            class="font-netflix text-2xl text-white tracking-wider"
+            class="font-netflix
+                   text-2xl
+                   text-white
+                   tracking-wider"
           >
             PROFILE NODE SETTINGS
           </h3>
@@ -529,24 +729,32 @@
         <!-- SUCCESS MESSAGE -->
         <div
           *ngIf="successMessage"
-          class="bg-brand-red/10 border border-brand-red/40
-                 text-brand-red px-3 py-2 rounded text-xs"
+          class="bg-brand-red/10
+                 border border-brand-red/40
+                 text-brand-red
+                 px-3 py-2
+                 rounded
+                 text-xs"
         >
           {{ successMessage }}
         </div>
 
 
-        <!-- ERROR MESSAGE -->
+        <!-- SETTINGS ERROR -->
         <div
           *ngIf="errorMessage"
-          class="bg-red-500/10 border border-red-500/40
-                 text-red-400 px-3 py-2 rounded text-xs"
+          class="bg-red-500/10
+                 border border-red-500/40
+                 text-red-400
+                 px-3 py-2
+                 rounded
+                 text-xs"
         >
           {{ errorMessage }}
         </div>
 
 
-        <!-- SETTINGS FORM -->
+        <!-- FORM -->
         <form
           (ngSubmit)="onSaveSettings()"
           #profileForm="ngForm"
@@ -558,7 +766,10 @@
 
             <label
               for="fullName"
-              class="block text-gray-400 mb-1 font-semibold"
+              class="block
+                     text-gray-400
+                     mb-1
+                     font-semibold"
             >
               FULL NAME
             </label>
@@ -571,11 +782,13 @@
               required
               minlength="2"
               autocomplete="name"
-              class="w-full bg-[#0B0A0F]
+              class="w-full
+                     bg-[#0B0A0F]
                      border border-gray-800
                      focus:border-brand-red
                      text-gray-200
-                     px-4 py-2.5 rounded
+                     px-4 py-2.5
+                     rounded
                      outline-none
                      transition-all duration-300"
             />
@@ -588,7 +801,10 @@
 
             <label
               for="email"
-              class="block text-gray-400 mb-1 font-semibold"
+              class="block
+                     text-gray-400
+                     mb-1
+                     font-semibold"
             >
               EMAIL ADDRESS
             </label>
@@ -601,10 +817,12 @@
               required
               autocomplete="email"
               disabled
-              class="w-full bg-[#0B0A0F]
+              class="w-full
+                     bg-[#0B0A0F]
                      border border-gray-800
                      text-gray-500
-                     px-4 py-2.5 rounded
+                     px-4 py-2.5
+                     rounded
                      cursor-not-allowed"
             />
 
@@ -615,7 +833,7 @@
           </div>
 
 
-          <!-- SAVE BUTTON -->
+          <!-- SAVE -->
           <button
             type="submit"
             [disabled]="isSaving || profileForm.invalid"
@@ -623,7 +841,6 @@
                    hover:bg-brand-red-glow
                    disabled:opacity-50
                    disabled:cursor-not-allowed
-                   disabled:hover:scale-100
                    text-white
                    font-netflix
                    text-base
@@ -647,8 +864,11 @@
          FOOTER
          ======================================================= -->
     <div
-      class="text-center text-[10px] text-gray-600
-             border-t border-gray-800/60 pt-4 mt-auto"
+      class="text-center
+             text-[10px]
+             text-gray-600
+             border-t border-gray-800/60
+             pt-4 mt-auto"
     >
       ENGINEO GRAPH INFRASTRUCTURE &copy; 2026
     </div>

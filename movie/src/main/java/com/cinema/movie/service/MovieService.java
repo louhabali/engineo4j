@@ -1,6 +1,6 @@
 package com.cinema.movie.service;
 
-import com.cinema.movie.dto.MovieResponseDto;
+import com.cinema.movie.dto.*;
 
 import java.util.List;
 
@@ -9,4 +9,7 @@ public interface MovieService {
     MovieResponseDto getMovieById(long id);
     List<MovieResponseDto> getPaginatedMovies(int page, int size);
     List<MovieResponseDto> searchMovies(String title, String genre, Integer releaseYear, int page, int size);
+   List<MovieCardDto> getMovieCardsByIds(
+            List<Long> ids
+    );
 }

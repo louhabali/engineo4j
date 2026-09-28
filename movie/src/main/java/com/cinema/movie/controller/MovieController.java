@@ -1,7 +1,8 @@
 package com.cinema.movie.controller;
 
+import com.cinema.movie.dto.BatchMovieRequestDto;
+import com.cinema.movie.dto.MovieCardDto;
 import com.cinema.movie.dto.MovieResponseDto;
-
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +17,10 @@ import java.util.List;
 public class MovieController {
 
     private final MovieService movieService;
-  
 
     public MovieController(MovieService movieService) {
         this.movieService = movieService;
-      
+
     }
 
     @GetMapping
@@ -54,4 +54,20 @@ public class MovieController {
         List<MovieResponseDto> movies = movieService.searchMovies(query, genre, releaseYear, page, size);
         return ResponseEntity.ok(movies);
     }
+
+    @PostMapping("/batch")
+    public ResponseEntity<List<MovieCardDto>> getMoviesByIds(
+            @RequestBody BatchMovieRequestDto request) {
+
+        if (request == null ||
+                request.getIds() == null ||
+                request.getIds().isEmpty()) {
+
+            return ResponseEntity.ok(List.of());
+        }
+
+        return ResponseEntity.ok(
+                movieService.getMovieCardsByIds(request.getIds()));
+    }
+
 }
