@@ -28,10 +28,6 @@ public class MovieServiceImpl implements MovieService {
         this.movieRepository = movieRepository;
     }
 
-    // --------------------------------------------------
-    // Get all movies
-    // --------------------------------------------------
-
     @Override
     public List<MovieResponseDto> getAllMovies() {
 
@@ -41,19 +37,11 @@ public class MovieServiceImpl implements MovieService {
                 .toList();
     }
 
-    // --------------------------------------------------
-    // Get paginated movies
-    // --------------------------------------------------
-
     @Override
-    @Cacheable(
-        value = "moviesCache",
-        key = "#page + '-' + #size"
-    )
+    @Cacheable(value = "moviesCache", key = "#page + '-' + #size")
     public List<MovieResponseDto> getPaginatedMovies(
             int page,
-            int size
-    ) {
+            int size) {
 
         Pageable pageable = PageRequest.of(page, size);
 
@@ -63,25 +51,15 @@ public class MovieServiceImpl implements MovieService {
                 .toList();
     }
 
-    // --------------------------------------------------
-    // Get movie by ID
-    // --------------------------------------------------
-
     @Override
     public MovieResponseDto getMovieById(long movieId) {
 
         return movieRepository.findById(movieId)
                 .map(this::mapToDto)
                 .orElseThrow(
-                    () -> new MovieNotFoundException(
-                        "Movie not found with ID: " + movieId
-                    )
-                );
+                        () -> new MovieNotFoundException(
+                                "Movie not found with ID: " + movieId));
     }
-
-    // --------------------------------------------------
-    // Search movies
-    // --------------------------------------------------
 
     @Override
     public List<MovieResponseDto> searchMovies(
@@ -89,56 +67,41 @@ public class MovieServiceImpl implements MovieService {
             String genre,
             Integer releaseYear,
             int page,
-            int size
-    ) {
+            int size) {
 
         Pageable pageable = PageRequest.of(page, size);
 
-        Specification<MovieEntity> specification =
-                MovieSpecifications.filterMovies(
-                    title,
-                    genre,
-                    releaseYear
-                );
+        Specification<MovieEntity> specification = MovieSpecifications.filterMovies(
+                title,
+                genre,
+                releaseYear);
 
         return movieRepository.findAll(
-                    specification,
-                    pageable
-                )
+                specification,
+                pageable)
                 .stream()
                 .map(this::mapToDto)
                 .toList();
     }
 
-    // --------------------------------------------------
-    // Get movie cards by IDs
-    // --------------------------------------------------
-
     @Override
     @Transactional
     public List<MovieCardDto> getMovieCardsByIds(
-            List<Long> ids
-    ) {
+            List<Long> ids) {
 
         if (ids == null || ids.isEmpty()) {
             return List.of();
         }
 
-        List<MovieEntity> movies =
-                movieRepository.findAllById(ids);
+        List<MovieEntity> movies = movieRepository.findAllById(ids);
 
         return movies.stream()
                 .map(this::mapToMovieCardDto)
                 .toList();
     }
 
-    // --------------------------------------------------
-    // Movie Response DTO mapper
-    // --------------------------------------------------
-
     private MovieResponseDto mapToDto(
-            MovieEntity entity
-    ) {
+            MovieEntity entity) {
 
         return MovieResponseDto.builder()
                 .id(entity.getId())
@@ -149,10 +112,9 @@ public class MovieServiceImpl implements MovieService {
                 .duration(entity.getDuration())
                 .director(entity.getDirector())
                 .genres(
-                    entity.getGenres() != null
-                        ? new ArrayList<>(entity.getGenres())
-                        : null
-                )
+                        entity.getGenres() != null
+                                ? new ArrayList<>(entity.getGenres())
+                                : null)
                 .releaseYear(entity.getReleaseYear())
                 .averageRating(entity.getAverageRating())
                 .bannerUrl(entity.getBannerUrl())
@@ -160,13 +122,8 @@ public class MovieServiceImpl implements MovieService {
                 .build();
     }
 
-    // --------------------------------------------------
-    // Movie Card DTO mapper
-    // --------------------------------------------------
-
     private MovieCardDto mapToMovieCardDto(
-            MovieEntity entity
-    ) {
+            MovieEntity entity) {
 
         return MovieCardDto.builder()
                 .id(entity.getId())
@@ -175,10 +132,9 @@ public class MovieServiceImpl implements MovieService {
                 .releaseYear(entity.getReleaseYear())
                 .averageRating(entity.getAverageRating())
                 .genres(
-                    entity.getGenres() != null
-                        ? new ArrayList<>(entity.getGenres())
-                        : null
-                )
+                        entity.getGenres() != null
+                                ? new ArrayList<>(entity.getGenres())
+                                : null)
                 .posterUrl(entity.getPosterUrl())
                 .bannerUrl(entity.getBannerUrl())
                 .build();

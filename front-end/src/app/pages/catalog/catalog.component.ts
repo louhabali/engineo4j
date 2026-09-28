@@ -152,7 +152,7 @@ export class CatalogComponent implements OnInit {
     this.heroMovie = {
       id: Number(first.id) || 101,
       title: first.title,
-      tagline: 'FEATURED MOVIE FROM YOUR CATALOG',
+      tagline: 'FEATURED MOVIE FOR YOU',
       description: 'Explore the latest additions to your cinematic collection.',
       rating: first.averageRating || 8.0,
       year: first.releaseYear || 2024,
