@@ -61,7 +61,7 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
                     
                     ServerHttpRequest mutatedRequest = request.mutate()
                             .header("X-User-Id", userId)
-                            .header("X-User-Email", email)
+                            .header("X-User-Email", email)git pul
                             .build();
 
                     return chain.filter(exchange.mutate().request(mutatedRequest).build());
