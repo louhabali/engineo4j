@@ -8,6 +8,7 @@ import io.lettuce.core.codec.RedisCodec;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.codec.ByteArrayCodec;
 import io.lettuce.core.codec.StringCodec;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,8 +16,10 @@ import org.springframework.context.annotation.Configuration;
 public class RateLimitConfig {
 
     @Bean
-    public RedisClient redisClient() {
-        return RedisClient.create("redis://localhost:6379");
+    public RedisClient redisClient(
+            @Value("${spring.data.redis.host:localhost}") String host,
+            @Value("${spring.data.redis.port:6379}") int port) {
+        return RedisClient.create("redis://" + host + ":" + port);
     }
 
     @Bean

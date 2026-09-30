@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/recommendations")
+@RequestMapping("/api/v1/recommendations")
 @RequiredArgsConstructor
 public class RecommendationController {
 

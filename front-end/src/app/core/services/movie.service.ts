@@ -7,13 +7,14 @@ import {
   MovieDetail,
   RelatedGraphMovie,
 } from '../../models/movie.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MovieService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8082/api/v1/movies';
+  private baseUrl = `${environment.apiBaseUrl}/movies`;
 
   getAllMovies(): Observable<MovieCard[]> {
     return this.http.get<MovieCard[]>(this.baseUrl);
@@ -53,7 +54,7 @@ getFilteredMovies(
       params = params.set('genre', genre);
     }
     if (year) {
-      params = params.set('year', year.toString());
+      params = params.set('releaseYear', year.toString());
     }
 
     return this.http.get<MovieCard[]>(`${this.baseUrl}/search`, { params });

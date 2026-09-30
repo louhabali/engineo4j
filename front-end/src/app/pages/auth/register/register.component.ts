@@ -38,7 +38,7 @@ export class RegisterComponent {
     private userService: UserService,
     private router: Router,
     private sanitizer: DomSanitizer // Inject sanitizer
-  ) {}
+  ) { }
 
   onRegister(): void {
     if (!this.fullName || !this.email || !this.password) {
@@ -58,7 +58,7 @@ export class RegisterComponent {
     this.userService.register(payload).subscribe({
       next: (response: RegisterResponse) => {
         this.isLoading = false;
-        
+
         // Match the property coming from your Java RegisterResponse DTO
         console.log('OTP AUTH URI:', response.otpAuthUri);
         this.otpAuthUri = response.otpAuthUri;
@@ -67,18 +67,19 @@ export class RegisterComponent {
       },
       error: (err) => {
         this.isLoading = false;
+        console.log("[ERROR In REGISTER] ==> ", err)
         this.errorMessage =
-          err.error?.message ||
+          err.error?.errorMessage ||
           'Registration failed. Please try again.';
       }
     });
   }
 
   // Safe method to generate the QR code image URL for the HTML template
- getSafeQrUrl(): SafeUrl {
-  const qrApiUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' + encodeURIComponent(this.otpAuthUri);
-  return this.sanitizer.bypassSecurityTrustUrl(qrApiUrl);
-}
+  getSafeQrUrl(): SafeUrl {
+    const qrApiUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' + encodeURIComponent(this.otpAuthUri);
+    return this.sanitizer.bypassSecurityTrustUrl(qrApiUrl);
+  }
 
   verifyMfa(): void {
     if (!this.mfaCode || this.mfaCode.length !== 6) {
