@@ -8,6 +8,7 @@ import {
 } from '../../models/movie.model';
 
 import { MovieService } from '../../core/services/movie.service';
+import { RatingService } from '../../core/services/rating.service';
 import { UserService } from '../../core/services/user.service';
 
 @Component({
@@ -20,6 +21,7 @@ export class MovieDetailComponent implements OnInit {
 
   private route = inject(ActivatedRoute);
   private movieService = inject(MovieService);
+  private ratingService = inject(RatingService);
   private userService = inject(UserService);
 
   movieId!: number;
@@ -27,6 +29,9 @@ export class MovieDetailComponent implements OnInit {
   hoveredStar = 0;
   isWatchlisted = false;
   isWatchlistLoading = false;
+  isRatingSubmitting = false;
+  ratingMessage = '';
+  ratingError = '';
 
   movie: MovieDetail = {
     id: 0,
@@ -196,12 +201,29 @@ export class MovieDetailComponent implements OnInit {
   // --------------------------------------------------
 
   setRating(rating: number): void {
-    this.movie.userRating = rating;
+    this.ratingMessage = '';
+    this.ratingError = '';
 
-    console.log(
-      `Updated rating for movie ${this.movieId} to ${rating} stars`
-    );
+    if (!this.userService.isAuthenticated()) {
+      this.ratingError = 'Please log in to rate this movie.';
+      return;
+    }
 
-    // TODO: Send rating update to backend
+    if (this.isRatingSubmitting) return;
+
+    this.isRatingSubmitting = true;
+    this.ratingService.submitRating({ movieId: this.movieId, score: rating }).subscribe({
+      next: (savedRating) => {
+        this.movie.userRating = savedRating.score;
+        this.hoveredStar = savedRating.score;
+        this.ratingMessage = 'Your rating has been saved.';
+        this.isRatingSubmitting = false;
+      },
+      error: (error) => {
+        this.ratingError = error.error?.message || 'Could not save your rating. Please try again.';
+        this.hoveredStar = this.movie.userRating || 0;
+        this.isRatingSubmitting = false;
+      }
+    });
   }
 }

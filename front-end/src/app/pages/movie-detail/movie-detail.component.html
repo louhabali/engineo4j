@@ -237,6 +237,7 @@
               <button
                 type="button"
                 *ngFor="let star of [1, 2, 3, 4, 5]"
+                [disabled]="isRatingSubmitting"
 
                 (mouseenter)="hoveredStar = star"
 
@@ -261,6 +262,9 @@
             </div>
 
           </div>
+          <p *ngIf="isRatingSubmitting" class="mt-2 text-xs text-gray-400" aria-live="polite">Saving rating…</p>
+          <p *ngIf="ratingMessage" class="mt-2 text-xs text-green-400" role="status">{{ ratingMessage }}</p>
+          <p *ngIf="ratingError" class="mt-2 text-xs text-red-400" role="alert">{{ ratingError }}</p>
 
         </div>
 

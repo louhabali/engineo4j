@@ -12,8 +12,8 @@ This checklist tracks work identified by comparing the current code with the pro
 
 ## P1 — Complete the main user flows
 
-- [ ] **Implement rating API support in Angular.** Add a rating service and send a user's selected score to the backend from movie details and recommendation cards.
-- [ ] **Support one current rating per user and movie.** Define create/update behavior, persist rating timestamps, and prevent duplicate rows for repeated submissions.
+- [x] **Implement rating API support in Angular.** Added a shared rating service and connected movie detail and recommendation stars to the Rating API with save/error feedback.
+- [x] **Support one current rating per user and movie.** Repeated submissions update the existing rating, creation/update timestamps are persisted, and a database uniqueness constraint prevents duplicate user/movie rows.
 - [ ] **Use the authenticated identity for ratings.** Remove the mock user fallback; ensure the gateway supplies a verified user ID and the Rating service requires it.
 - [ ] **Load personalized recommendations in Angular.** Replace hard-coded sample cards with data from the Recommendation API and handle empty, loading, and error states.
 - [ ] **Hydrate recommendation results with movie details.** Map Neo4j movie IDs to the catalog's movie records so the UI can display title, artwork, genres, year, and score.

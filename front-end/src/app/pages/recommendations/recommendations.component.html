@@ -77,6 +77,8 @@
       <div class="flex justify-center items-center gap-2 text-2xl py-2">
         <button 
           *ngFor="let star of [1, 2, 3, 4, 5]" 
+          type="button"
+          [disabled]="isRatingSubmitting"
           (mouseenter)="hoveredStar = star" 
           (click)="setRating(star)"
           class="transition-transform hover:scale-125 focus:outline-none">
@@ -84,7 +86,9 @@
         </button>
       </div>
 
-      <p class="text-[10px] text-gray-500">CLICK A STAR TO SAVE RATING TO GRAPH ENGINE</p>
+      <p *ngIf="isRatingSubmitting" class="text-xs text-gray-400" aria-live="polite">Saving rating…</p>
+      <p *ngIf="ratingError" class="text-xs text-red-400" role="alert">{{ ratingError }}</p>
+      <p class="text-[10px] text-gray-500">CLICK A STAR TO SAVE YOUR RATING</p>
     </div>
   </div>
 

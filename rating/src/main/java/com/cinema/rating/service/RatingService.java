@@ -20,16 +20,21 @@ public class RatingService {
 
     @Transactional
     public Rating addRating(String userId, RatingRequest request) {
-        // Save 
-        Rating rating = new Rating();
-        rating.setUserId(userId);
-        rating.setMovieId(request.movieId());
+        Rating rating = ratingRepository.findByUserIdAndMovieId(userId, request.movieId())
+                .orElseGet(() -> {
+                    Rating newRating = new Rating();
+                    newRating.setUserId(userId);
+                    newRating.setMovieId(request.movieId());
+                    return newRating;
+                });
         rating.setScore(request.score());
-        
+
         Rating savedRating = ratingRepository.save(rating);
 
-        // Publish 
-        MovieRatedEvent event = new MovieRatedEvent(userId, request.movieId(), request.score());
+        MovieRatedEvent event = new MovieRatedEvent(
+                savedRating.getUserId(),
+                savedRating.getMovieId(),
+                savedRating.getScore());
         eventProducer.sendRatingEvent(event);
 
         return savedRating;
