@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
+import { AuthStateService } from './auth-state.service';
 
 import {
   RegisterRequest,
@@ -23,8 +24,14 @@ import { environment } from '../../../environments/environment.development';
 export class UserService {
 
   private readonly apiUrl = environment.apiBaseUrl;
+  readonly authenticated$: Observable<boolean>;
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(
+    private readonly http: HttpClient,
+    private readonly authState: AuthStateService
+  ) {
+    this.authenticated$ = authState.authenticated$;
+  }
 
   // --- Authentication ---
 
@@ -49,7 +56,7 @@ export class UserService {
     ).pipe(
       tap((response: AuthResponse) => {
         if (response.token) {
-          localStorage.setItem('auth_token', response.token);
+          this.authState.setToken(response.token);
         }
       })
     );
@@ -109,14 +116,14 @@ isInWatchlist(movieId: number): Observable<boolean> {
   // --- Auth Helpers ---
 
   getToken(): string | null {
-    return localStorage.getItem('auth_token');
+    return this.authState.getToken();
   }
 
   logout(): void {
-    localStorage.removeItem('auth_token');
+    this.authState.logout();
   }
 
   isAuthenticated(): boolean {
-    return !!this.getToken();
+    return this.authState.isAuthenticated();
   }
 }

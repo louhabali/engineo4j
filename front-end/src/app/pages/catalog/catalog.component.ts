@@ -6,6 +6,8 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { FeaturedMovie, MovieCard } from '../../models/movie.model';
 import { MovieService } from '../../core/services/movie.service';
+import { UserService } from '../../core/services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -15,6 +17,9 @@ import { MovieService } from '../../core/services/movie.service';
 })
 export class CatalogComponent implements OnInit {
   private movieService = inject(MovieService);
+  private userService = inject(UserService);
+  private router = inject(Router);
+  readonly authenticated$ = this.userService.authenticated$;
 
   searchQuery = '';
   selectedGenre = 'ALL';
@@ -61,6 +66,11 @@ export class CatalogComponent implements OnInit {
     if (this.isMenuOpen) {
       this.isSearchOpen = false;
     }
+  }
+
+  logout(): void {
+    this.userService.logout();
+    void this.router.navigate(['/']);
   }
 
   onSearchChange(): void {

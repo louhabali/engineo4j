@@ -47,9 +47,12 @@
         />
       </div>
 
-      <a routerLink="/login" class="bg-brand-red hover:bg-brand-red-glow text-white font-netflix text-base px-5 py-2 shadow-spidey-glow hover:scale-105 transition-all duration-300">
+      <a *ngIf="!(authenticated$ | async)" routerLink="/login" class="bg-brand-red hover:bg-brand-red-glow text-white font-netflix text-base px-5 py-2 shadow-spidey-glow hover:scale-105 transition-all duration-300">
         AUTHENTICATE
       </a>
+      <button *ngIf="authenticated$ | async" type="button" (click)="logout()" class="border border-gray-700 hover:border-brand-red text-gray-300 font-netflix text-base px-5 py-2 transition-all duration-300">
+        SIGN OUT
+      </button>
     </div>
 
     <!-- MOBILE CONTROLS -->
@@ -129,13 +132,20 @@
       </a>
       
       <!-- MOBILE LAUNCH APP BUTTON -->
-      <a 
+      <a *ngIf="!(authenticated$ | async)"
         routerLink="/login" 
         (click)="isMenuOpen = false" 
         class="bg-brand-red hover:bg-brand-red-glow text-white font-netflix text-center text-sm py-2.5 mt-2 shadow-spidey-glow transition-all duration-300"
       >
         AUTHENTICATE 
       </a>
+      <button *ngIf="authenticated$ | async"
+        type="button"
+        (click)="logout(); isMenuOpen = false"
+        class="border border-gray-700 hover:border-brand-red text-gray-300 text-center py-2.5 mt-2 transition-all duration-300"
+      >
+        SIGN OUT
+      </button>
     </div>
   </nav>
 

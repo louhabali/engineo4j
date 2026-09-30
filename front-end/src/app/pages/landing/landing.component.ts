@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, RouterLink } from '@angular/router';
+import { inject } from '@angular/core';
+import { UserService } from '../../core/services/user.service';
 
 @Component({
   selector: 'app-landing',
@@ -9,6 +11,7 @@ import { RouterModule, RouterLink } from '@angular/router';
   templateUrl: './landing.component.html',
 })
 export class LandingComponent {
+  readonly authenticated$ = inject(UserService).authenticated$;
   isMenuOpen = false;
   features = [
     { title: 'NEO4J GRAPH DATABASE', desc: 'Real-time collaborative filtering & high-speed relationship traversal.' },

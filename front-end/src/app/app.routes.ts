@@ -8,6 +8,7 @@ import { RecommendationsComponent } from './pages/recommendations/recommendation
 import { ErrorComponent } from './shared/components/error/error.component';
 import { GraphComponent } from './pages/graph/graph.component';
 import { MovieDetailComponent } from './pages/movie-detail/movie-detail.component';
+import { authGuard, guestGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
     {
@@ -17,14 +18,17 @@ export const routes: Routes = [
   {
     path :'register',
     component: RegisterComponent,
+    canActivate: [guestGuard],
   },
   {
     path: 'login',
     component: LoginComponent,
+    canActivate: [guestGuard],
   },
   {
     path :'profile',
     component : ProfileComponent, 
+    canActivate: [authGuard],
   },
   {
     path :'catalog',
@@ -33,6 +37,7 @@ export const routes: Routes = [
   {
     path :'recommendations',
     component : RecommendationsComponent, 
+    canActivate: [authGuard],
   },
   {
     path :'graph',

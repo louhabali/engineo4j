@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserService } from '../../../core/services/user.service';
 import { MfaLoginRequest } from '../../../models/user.model';
 
@@ -18,7 +18,11 @@ export class LoginComponent {
   errorMessage = '';
   isLoading = false;
 
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(
+    private userService: UserService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   onLogin(): void {
     if (!this.email || !this.password || !this.code) {
@@ -39,7 +43,11 @@ export class LoginComponent {
       next: (response) => {
         this.isLoading = false;
         console.log('Login successful, token securely cached.');
-        this.router.navigate(['/catalog']); // Redirect to home/catalog view
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+        const safeReturnUrl = returnUrl?.startsWith('/') && !returnUrl.startsWith('//')
+          ? returnUrl
+          : '/catalog';
+        void this.router.navigateByUrl(safeReturnUrl);
       },
       error: (err) => {
         this.isLoading = false;
