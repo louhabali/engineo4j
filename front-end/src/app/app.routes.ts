@@ -11,12 +11,12 @@ import { MovieDetailComponent } from './pages/movie-detail/movie-detail.componen
 import { authGuard, guestGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
-    {
+  {
     path: '',
     component: LandingComponent,
   },
   {
-    path :'register',
+    path: 'register',
     component: RegisterComponent,
     canActivate: [guestGuard],
   },
@@ -26,29 +26,31 @@ export const routes: Routes = [
     canActivate: [guestGuard],
   },
   {
-    path :'profile',
-    component : ProfileComponent, 
+    path: 'profile',
+    component: ProfileComponent,
     canActivate: [authGuard],
   },
   {
-    path :'catalog',
-    component : CatalogComponent,
-  },
-  {
-    path :'recommendations',
-    component : RecommendationsComponent, 
+    path: 'catalog',
+    component: CatalogComponent,
     canActivate: [authGuard],
   },
   {
-    path :'graph',
-    component : GraphComponent,
+    path: 'recommendations',
+    component: RecommendationsComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'graph',
+    component: GraphComponent,
   },
   { path: 'movie/:id', component: MovieDetailComponent },
   { path: '401', component: ErrorComponent, data: { code: '401' } },
+  { path: '429', component: ErrorComponent, data: { code: '429' } },
   { path: '403', component: ErrorComponent, data: { code: '403' } },
   { path: '500', component: ErrorComponent, data: { code: '500' } },
   { path: '404', component: ErrorComponent, data: { code: '404' } },
-  
+
   // WILDCARD REDIRECT TO 404
   { path: '**', redirectTo: '404' }
 ];

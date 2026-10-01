@@ -1,10 +1,6 @@
-export interface GraphRecommendation {
-  id: number;
-  title: string;
-  year: number;
-  genre: string;
-  posterUrl: string;
-  affinityScore: number;
-  connectedNode: string;
+import { MovieCard } from './movie.model';
+
+export interface GraphRecommendation extends MovieCard {
+  relevanceScore: number;
   userRating?: number;
 }

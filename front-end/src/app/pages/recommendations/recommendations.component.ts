@@ -5,7 +5,7 @@ import { RouterLink } from '@angular/router';
 import { GraphRecommendation } from '../../models/recommendations.model';
 import { RatingService } from '../../core/services/rating.service';
 import { UserService } from '../../core/services/user.service';
-
+import { RecommendationsService } from '../../core/services/recommendations.service';
 
 @Component({
   selector: 'app-recommendations',
@@ -16,13 +16,11 @@ import { UserService } from '../../core/services/user.service';
 export class RecommendationsComponent implements OnInit {
   private readonly ratingService = inject(RatingService);
   private readonly userService = inject(UserService);
+  private readonly recommendationsService = inject(RecommendationsService);
 
-  recommendations: GraphRecommendation[] = [
-    { id: 101, title: 'Spider-Man: Into the Spider-Verse', year: 2018, genre: 'Animation / Action', posterUrl: 'https://image.tmdb.org/t/p/w500/iiZZdoQH211fiOpP39Tz3S2L1q5.jpg', affinityScore: 98, connectedNode: 'Spider-Man: Across the Spider-Verse' },
-    { id: 102, title: 'Blade Runner 2049', year: 2017, genre: 'Sci-Fi / Mystery', posterUrl: 'https://image.tmdb.org/t/p/w500/gA9L1AS22P9S215L1A1S1A1S1A.jpg', affinityScore: 94, connectedNode: 'Interstellar' },
-    { id: 103, title: 'The Matrix', year: 1999, genre: 'Sci-Fi / Action', posterUrl: 'https://image.tmdb.org/t/p/w500/f89U339R3S129S39S.jpg', affinityScore: 91, connectedNode: 'Inception' },
-    { id: 104, title: 'Dune: Part Two', year: 2024, genre: 'Sci-Fi / Adventure', posterUrl: 'https://image.tmdb.org/t/p/w500/1pdfLvk3R9S.jpg', affinityScore: 89, connectedNode: 'Interstellar' }
-  ];
+  recommendations: GraphRecommendation[] = [];
+  isLoading = false;
+  loadError = '';
 
   selectedRatingItem: GraphRecommendation | null = null;
   hoveredStar = 0;
@@ -30,7 +28,24 @@ export class RecommendationsComponent implements OnInit {
   ratingError = '';
 
   ngOnInit(): void {
-    // TODO: Fetch recommendations from backend
+    this.loadRecommendations();
+  }
+
+  loadRecommendations(): void {
+    this.isLoading = true;
+    this.loadError = '';
+
+    this.recommendationsService.getRecommendations().subscribe({
+      next: (recommendations) => {
+        this.recommendations = recommendations;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Failed to load recommendations:', error);
+        this.loadError = 'Could not load recommendations. Please try again later.';
+        this.isLoading = false;
+      },
+    });
   }
 
   openRatingModal(item: GraphRecommendation): void {

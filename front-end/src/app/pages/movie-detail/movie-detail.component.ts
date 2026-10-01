@@ -1,6 +1,6 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import {
   MovieDetail,
@@ -10,6 +10,8 @@ import {
 import { MovieService } from '../../core/services/movie.service';
 import { RatingService } from '../../core/services/rating.service';
 import { UserService } from '../../core/services/user.service';
+import { AuthStateService } from '../../core/services/auth-state.service';
+import { RatingSummary } from '../../models/rating.model';
 
 @Component({
   selector: 'app-movie-detail',
@@ -23,15 +25,21 @@ export class MovieDetailComponent implements OnInit {
   private movieService = inject(MovieService);
   private ratingService = inject(RatingService);
   private userService = inject(UserService);
-
+  private authState = inject(AuthStateService);
+  private router = inject(Router);
   movieId!: number;
 
   hoveredStar = 0;
+  readonly userRating = signal(0);
   isWatchlisted = false;
   isWatchlistLoading = false;
   isRatingSubmitting = false;
   ratingMessage = '';
   ratingError = '';
+  ratingSummary: RatingSummary = {
+    averageRating: 0, ratingCount: 0,
+    movieId: 0, userRating: 0 // Initialize userId as an empty string
+  };
 
   movie: MovieDetail = {
     id: 0,
@@ -66,8 +74,19 @@ export class MovieDetailComponent implements OnInit {
     }
 
     this.fetchMovieDetails(this.movieId);
-    this.fetchGraphRecommendations(this.movieId);
-    this.checkWatchlistStatus(this.movieId);
+    this.fetchRatingSummary(this.movieId);
+    this.authState.validateSession().subscribe({
+      next: (session) => {
+        if (session.status === 'authenticated') {
+          this.checkWatchlistStatus(this.movieId);
+        } else {
+          this.isWatchlisted = false;
+        }
+      },
+      error: () => {
+        this.isWatchlisted = false;
+      },
+    });
   }
 
   // --------------------------------------------------
@@ -78,28 +97,32 @@ export class MovieDetailComponent implements OnInit {
     this.movieService.getMovieById(id).subscribe({
       next: (data) => {
         this.movie = data;
-        this.hoveredStar = this.movie.userRating || 0;
       },
       error: (err) => {
         console.error('Failed to fetch movie details:', err);
+        if (err.status === 404) {
+          this.router.navigate(['/404']);
+        }
       }
     });
   }
 
-  // --------------------------------------------------
-  // Graph Recommendations
-  // --------------------------------------------------
-
-  fetchGraphRecommendations(id: number): void {
-    this.movieService.getGraphRecommendations(id).subscribe({
-      next: (data) => {
-        this.graphConnectedMovies = data;
+  fetchRatingSummary(id: number): void {
+    this.ratingService.getMovieRatingSummary(id).subscribe({
+      next: (summary) => {
+        this.ratingSummary = summary;
+        this.userRating.set(summary.userRating ?? 0);
+        this.hoveredStar = this.userRating();
       },
-      error: (err) => {
-        console.error('Failed to fetch graph recommendations:', err);
+      error: (error) => {
+        console.error('Failed to fetch movie rating summary:', error);
+        this.ratingSummary = { averageRating: 0, ratingCount: 0, movieId: id, userRating: 0 };
+        this.userRating.set(0);
+        this.hoveredStar = 0;
       }
     });
   }
+
 
   // --------------------------------------------------
   // Watchlist
@@ -115,7 +138,7 @@ export class MovieDetailComponent implements OnInit {
     this.userService.isInWatchlist(movieId).subscribe({
       next: (response) => {
 
-      
+
         this.isWatchlisted = response;
       },
 
@@ -214,9 +237,10 @@ export class MovieDetailComponent implements OnInit {
     this.isRatingSubmitting = true;
     this.ratingService.submitRating({ movieId: this.movieId, score: rating }).subscribe({
       next: (savedRating) => {
-        this.movie.userRating = savedRating.score;
+        this.userRating.set(savedRating.score);
         this.hoveredStar = savedRating.score;
         this.ratingMessage = 'Your rating has been saved.';
+        this.fetchRatingSummary(this.movieId);
         this.isRatingSubmitting = false;
       },
       error: (error) => {

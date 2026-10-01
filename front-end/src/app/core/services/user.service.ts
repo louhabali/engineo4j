@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Observable, of, switchMap, tap, throwError } from 'rxjs';
 import { AuthStateService } from './auth-state.service';
+import { environment } from '../../../environments/environment.development';
 
 import {
   RegisterRequest,
@@ -15,8 +16,6 @@ import {
   WatchlistItem,
   WatchlistStatusResponse
 } from '../../models/user.model';
-// import { environment } from '../../../environments/environment';
-import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -58,7 +57,13 @@ export class UserService {
         if (response.token) {
           this.authState.setToken(response.token);
         }
-      })
+      }),
+      switchMap((response) => this.authState.validateSession().pipe(
+        switchMap((sessionStatus) => sessionStatus.status === 'authenticated'
+          ? of(response)
+          : throwError(() => new Error('The backend could not validate the new session.')),
+        ),
+      )),
     );
   }
 
@@ -106,11 +111,11 @@ export class UserService {
     );
   }
 
-isInWatchlist(movieId: number): Observable<boolean> {
-  return this.http.get<boolean>(
-    `${this.apiUrl}/users/watchlist/check/${movieId}`
-  );
-}
+  isInWatchlist(movieId: number): Observable<boolean> {
+    return this.http.get<boolean>(
+      `${this.apiUrl}/users/watchlist/check/${movieId}`
+    );
+  }
 
 
   // --- Auth Helpers ---

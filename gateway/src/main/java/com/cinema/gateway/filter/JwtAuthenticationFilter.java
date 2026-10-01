@@ -6,6 +6,7 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
@@ -36,12 +37,16 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         String path = request.getURI().getPath();
-
-        if (PUBLIC_ENDPOINTS.stream().anyMatch(path::startsWith)) {
+        boolean publicRatingRead = HttpMethod.GET.equals(request.getMethod())
+            && (path.matches("/api/v1/ratings/movie/\\d+/summary")
+                || "/api/v1/ratings/summaries".equals(path));
+        String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+     
+        if (PUBLIC_ENDPOINTS.stream().anyMatch(path::startsWith)
+            || (publicRatingRead && (authHeader == null || !authHeader.startsWith("Bearer ")))) {
             return chain.filter(exchange);
         }
 
-        String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();

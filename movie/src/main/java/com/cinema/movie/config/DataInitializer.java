@@ -279,7 +279,7 @@ public class DataInitializer implements CommandLineRunner {
             case "Parasite" -> "https://image.tmdb.org/t/p/w1280/hiKmpZMGZsrkA3cdce8a7Dpos1j.jpg";
             case "The Truman Show" -> "https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/rmiG2uwcNoGFmBKMoa1pIcf514L.jpg";
             case "Shutter Island" -> "https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/rbZvGN1A1QyZuoKzhCw8QPmf2q0.jpg";
-            
+            case "My Hero Academia: Two Heroes" -> "https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/ol0H2DGp4ifBHA4JDlCpwJWxnY2.jpg";
             default -> "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=1200&q=80";
         };
     }

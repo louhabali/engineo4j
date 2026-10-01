@@ -17,7 +17,7 @@ public class RecommendationController {
 
     @GetMapping
     public ResponseEntity<Collection<Map<String, Object>>> getRecommendations(
-            @RequestHeader(value = "X-User-Id", defaultValue = "mock-user-123") String userId) {
+            @RequestHeader(value = "X-User-Id") String userId) {
         
         Collection<Map<String, Object>> recommendations = recommendationService.getRecommendationsForUser(userId);
         return ResponseEntity.ok(recommendations);

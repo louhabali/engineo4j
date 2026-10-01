@@ -1,11 +1,18 @@
 export interface RatingRequest {
-  movieId: number;
+  movieId: string | number;
   score: number;
 }
 
 export interface RatingResponse {
   id: number;
   userId: string;
-  movieId: number;
+  movieId: string | number;
   score: number;
+}
+
+export interface RatingSummary {
+  movieId: number;
+  ratingCount: number;
+  averageRating: number;
+  userRating?: number | null;
 }

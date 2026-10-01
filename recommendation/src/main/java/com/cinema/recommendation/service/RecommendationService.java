@@ -16,10 +16,10 @@ public class RecommendationService {
     public Collection<Map<String, Object>> getRecommendationsForUser(String userId) {
         String query = """
             MATCH (u:User {id: $userId})-[r1:RATED]->(m:Movie)<-[r2:RATED]-(other:User)
-            WHERE r1.score > 4 AND r2.score > 4
+            WHERE r1.score >= 4 AND r2.score >= 4
             
-            MATCH (other)-[r3:RATED]->(rec:Movie)
-            WHERE r3.score > 4 AND NOT (u)-[:RATED]->(rec)
+            MATCH (other:User)-[r3:RATED]->(rec:Movie)
+            WHERE r3.score >= 4 AND NOT (u)-[:RATED]->(rec)
             
             RETURN DISTINCT rec.id AS movieId, count(*) AS relevanceScore
             ORDER BY relevanceScore DESC

@@ -95,7 +95,11 @@
             <span
               class="bg-brand-red/10 border border-brand-red/40 text-brand-red text-[10px] px-3 py-0.5 rounded-full font-bold"
             >
-              ★ {{ movie.averageRating }} / 10
+              <ng-container *ngIf="ratingSummary.ratingCount > 0; else noRatings">
+                ★ {{ ratingSummary.averageRating | number:'1.1-1' }} / 5
+                &bull; {{ ratingSummary.ratingCount }} {{ ratingSummary.ratingCount === 1 ? 'rating' : 'ratings' }}
+              </ng-container>
+              <ng-template #noRatings>NO RATINGS YET</ng-template>
             </span>
 
             <!-- RELEASE INFO -->
@@ -242,7 +246,7 @@
                 (mouseenter)="hoveredStar = star"
 
                 (mouseleave)="
-                  hoveredStar = movie.userRating || 0
+                  hoveredStar = userRating()
                 "
 
                 (click)="setRating(star)"
@@ -274,137 +278,6 @@
 
   </section>
 
-
-
-  <!-- ============================================== -->
-  <!-- GRAPH CONNECTED MOVIES -->
-  <!-- ============================================== -->
-
-  <main
-    class="max-w-7xl mx-auto px-6 py-12 space-y-6"
-  >
-
-    <!-- SECTION HEADER -->
-    <div
-      class="flex justify-between items-center border-b border-gray-800/80 pb-3"
-    >
-
-      <div>
-
-        <h3
-          class="font-netflix text-2xl text-white tracking-wider"
-        >
-          GRAPH CONNECTED NODES
-        </h3>
-
-        <p class="text-[10px] text-gray-500">
-          RECOMMENDED VIA GRAPH TRAVERSAL & AFFINITY WEIGHTS
-        </p>
-
-      </div>
-
-
-      <a
-        routerLink="/recommendations"
-        class="text-xs text-brand-red hover:underline"
-      >
-        EXPLORE ALL NODES →
-      </a>
-
-    </div>
-
-
-    <!-- RELATED MOVIES -->
-    <div
-      *ngIf="graphConnectedMovies.length > 0"
-      class="grid grid-cols-2 sm:grid-cols-4 gap-4"
-    >
-
-      <div
-        *ngFor="let rel of graphConnectedMovies"
-
-        class="bg-[#0B0A0F]
-               border border-gray-800
-               rounded-lg
-               overflow-hidden
-               hover:border-brand-red/60
-               transition-all
-               duration-300
-               group"
-      >
-
-        <!-- POSTER -->
-        <div
-          class="aspect-[2/3] relative overflow-hidden"
-        >
-
-          <img
-            [src]="rel.posterUrl"
-            [alt]="rel.title"
-
-            class="w-full h-full object-cover
-                   group-hover:scale-105
-                   transition-transform
-                   duration-500
-                   opacity-90
-                   group-hover:opacity-100"
-          />
-
-
-          <!-- MATCH SCORE -->
-          <div
-            class="absolute top-2 right-2
-                   bg-black/80
-                   text-brand-red
-                   border border-brand-red/40
-                   px-2 py-0.5
-                   rounded
-                   text-[10px]
-                   font-bold"
-          >
-            {{ rel.affinityScore }}% MATCH
-          </div>
-
-        </div>
-
-
-        <!-- MOVIE INFO -->
-        <div class="p-3 space-y-1">
-
-          <h4
-            class="font-netflix text-sm text-white truncate
-                   group-hover:text-brand-red
-                   transition-colors"
-          >
-            {{ rel.title }}
-          </h4>
-
-          <p
-            class="text-[9px] text-brand-red/80 truncate"
-          >
-            {{ rel.connectionReason }}
-          </p>
-
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <!-- NO RECOMMENDATIONS -->
-    <div
-      *ngIf="graphConnectedMovies.length === 0"
-      class="py-12 text-center"
-    >
-
-      <p class="text-xs text-gray-600">
-        NO GRAPH CONNECTIONS FOUND.
-      </p>
-
-    </div>
-
-  </main>
 
 
 

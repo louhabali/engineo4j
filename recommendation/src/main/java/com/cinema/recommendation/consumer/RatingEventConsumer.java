@@ -18,22 +18,22 @@ public class RatingEventConsumer {
 
     @KafkaListener(topics = "movie-ratings-topic", groupId = "recommendation-service-group")
     public void handleMovieRatedEvent(MovieRatedEvent event) {
-        log.info("Received MovieRatedEvent from Kafka: user={}, movie={}, score={}", 
+        log.info("Received MovieRatedEvent from Kafka: user={}, movie={}, score={}",
                 event.userId(), event.movieId(), event.score());
-
+        System.out.println("[Received MovieRatedEvent from Kafka] ---> : user=" + event.userId() + ", movie="
+                + event.movieId() + ", score=" + event.score());
         String query = """
-            MERGE (u:User {id: $userId})
-            MERGE (m:Movie {id: $movieId})
-            MERGE (u)-[r:RATED]->(m)
-            SET r.score = $score, r.updatedAt = timestamp()
-        """;
+                    MERGE (u:User {id: $userId})
+                    MERGE (m:Movie {id: $movieId})
+                    MERGE (u)-[r:RATED]->(m)
+                    SET r.score = $score, r.updatedAt = timestamp()
+                """;
 
-       try {
+        try {
             Map<String, Object> params = Map.of(
-                "userId", event.userId(), 
-                "movieId", event.movieId(), 
-                "score", event.score()
-            );
+                    "userId", event.userId(),
+                    "movieId", event.movieId(),
+                    "score", event.score());
 
             neo4jClient.query(query)
                     .bindAll(params)
@@ -43,4 +43,4 @@ public class RatingEventConsumer {
             log.error("Failed to update Neo4j graph for event: {}", e.getMessage(), e);
         }
     }
-}   
+}

@@ -8,6 +8,8 @@ import { FeaturedMovie, MovieCard } from '../../models/movie.model';
 import { MovieService } from '../../core/services/movie.service';
 import { UserService } from '../../core/services/user.service';
 import { Router } from '@angular/router';
+import { RatingService } from '../../core/services/rating.service';
+import { RatingSummary } from '../../models/rating.model';
 
 @Component({
   selector: 'app-home',
@@ -19,6 +21,7 @@ export class CatalogComponent implements OnInit {
   private movieService = inject(MovieService);
   private userService = inject(UserService);
   private router = inject(Router);
+  private ratingService = inject(RatingService);
   readonly authenticated$ = this.userService.authenticated$;
 
   searchQuery = '';
@@ -28,6 +31,7 @@ export class CatalogComponent implements OnInit {
   genres: string[] = ['ALL', 'ACTION', 'SCI-FI', 'ANIMATION', 'THRILLER', 'DRAMA'];
   trendingMovies: MovieCard[] = [];
   graphRecommendations: MovieCard[] = [];
+  ratingSummariesByMovieId: Record<string, RatingSummary> = {};
 
   currentPage = 0;
   pageSize = 8;
@@ -106,9 +110,10 @@ export class CatalogComponent implements OnInit {
         }
         
         this.trendingMovies = [...this.trendingMovies, ...movies];
+        this.loadRatingSummaries(movies);
 
         if (this.currentPage === 0 && movies.length > 0 && !this.heroMovie) {
-          this.initHero(movies[0]);
+          this.initHero(movies[2]);
         }
 
         this.currentPage++;
@@ -169,6 +174,34 @@ export class CatalogComponent implements OnInit {
       matchPercentage: 98,
       bannerUrl: first.bannerUrl || 'spiderbg.webp'
     };
+  }
+
+  private loadRatingSummaries(movies: MovieCard[]): void {
+    if (movies.length === 0) return;
+
+    this.ratingService.getMovieRatingSummaries(movies.map((movie) => movie.id)).subscribe({
+      next: (summaries) => {
+        const summariesByMovieId = new Map(
+          summaries.map((summary) => [String(summary.movieId), summary]),
+        );
+        for (const movie of movies) {
+          const movieId = String(movie.id);
+          if (!summariesByMovieId.has(movieId)) {
+            summariesByMovieId.set(movieId, {
+              movieId: Number(movie.id),
+              ratingCount: 0,
+              averageRating: 0,
+            });
+          }
+        }
+
+        this.ratingSummariesByMovieId = {
+          ...this.ratingSummariesByMovieId,
+          ...Object.fromEntries(summariesByMovieId),
+        };
+      },
+      error: (error) => console.error('Failed to load catalog rating summaries:', error),
+    });
   }
 
   onGenreSelect(genre: string): void {

@@ -250,6 +250,9 @@
       </button>
     </div>
 
+    <ng-template #ratingSummaryPending><span>LOADING RATINGS</span></ng-template>
+    <ng-template #noMovieRatings><span>NO RATINGS</span></ng-template>
+
     <!-- CAROUSEL 1: TRENDING NOW -->
     <section class="space-y-4">
       <div
@@ -285,7 +288,11 @@
             <div
               class="absolute top-2 right-2 bg-black/80 text-brand-red border border-brand-red/40 px-2 py-0.5 rounded text-[10px] font-bold"
             >
-              ★ {{ movie.averageRating }}
+              <ng-container *ngIf="ratingSummariesByMovieId[movie.id] as summary; else ratingSummaryPending">
+                <ng-container *ngIf="summary.ratingCount > 0; else noMovieRatings">
+                  ★ {{ summary.averageRating | number:'1.1-1' }} / 5 &bull; {{ summary.ratingCount }} {{ summary.ratingCount === 1 ? 'rating' : 'ratings' }}
+                </ng-container>
+              </ng-container>
             </div>
           </div>
 
@@ -336,7 +343,11 @@
             <div
               class="absolute top-2 right-2 bg-black/80 text-brand-red border border-brand-red/40 px-2 py-0.5 rounded text-[10px] font-bold"
             >
-              ★ {{ movie.averageRating }}
+              <ng-container *ngIf="ratingSummariesByMovieId[movie.id] as summary; else ratingSummaryPending">
+                <ng-container *ngIf="summary.ratingCount > 0; else noMovieRatings">
+                  ★ {{ summary.averageRating | number:'1.1-1' }} / 5 &bull; {{ summary.ratingCount }} {{ summary.ratingCount === 1 ? 'rating' : 'ratings' }}
+                </ng-container>
+              </ng-container>
             </div>
           </div>
           <div class="p-3">

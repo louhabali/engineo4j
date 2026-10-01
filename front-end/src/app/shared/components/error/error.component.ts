@@ -19,6 +19,7 @@ export class ErrorComponent implements OnInit {
 
   errorConfigs: Record<string, ErrorConfig> = {
     '401': { code: '401', title: 'AUTHENTICATION REQUIRED', description: 'Your session JWT token is missing or expired. Authenticate to access this node.' },
+    '429': { code: '429', title: 'REQUEST LIMIT EXCEEDED', description: 'You have exceeded the rate limit for this API endpoint.' },
     '403': { code: '403', title: 'NODE ACCESS FORBIDDEN', description: 'You do not have sufficient permissions to traverse this graph resource.' },
     '404': { code: '404', title: 'NODE NOT FOUND', description: 'The requested graph traversal route or movie node does not exist in the database.' },
     '500': { code: '500', title: 'GRAPH ENGINE FAILURE', description: 'An unexpected internal error occurred while executing the Neo4j query.' }

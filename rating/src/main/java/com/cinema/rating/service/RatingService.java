@@ -2,6 +2,7 @@ package com.cinema.rating.service;
 
 import com.cinema.rating.event.MovieRatedEvent;
 import com.cinema.rating.dto.RatingRequest;
+import com.cinema.rating.dto.RatingSummaryResponse;
 import com.cinema.rating.entity.Rating;
 import com.cinema.rating.producer.RatingEventProducer;
 import com.cinema.rating.repository.RatingRepository;
@@ -42,5 +43,16 @@ public class RatingService {
 
     public List<Rating> getRatingsByMovie(Long movieId) {
         return ratingRepository.findByMovieId(movieId);
+    }
+
+    public RatingSummaryResponse getRatingSummary(Long movieId, String userId) {
+        return ratingRepository.getSummaryByMovieId(movieId, userId);
+    }
+
+    public List<RatingSummaryResponse> getRatingSummaries(List<Long> movieIds) {
+        if (movieIds == null || movieIds.isEmpty()) {
+            return List.of();
+        }
+        return ratingRepository.getSummariesByMovieIds(movieIds);
     }
 }
