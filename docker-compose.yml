@@ -185,8 +185,14 @@ services:
     build: ./front-end
     depends_on:
       - gateway
+    # ports:
+    #   - "${FRONTEND_PORT:-4200}:80"
     ports:
-      - "${FRONTEND_PORT:-4200}:80"
+      - "8080:80"
+      - "8443:443"
+
+    volumes:
+      - ./front-end/certs:/etc/nginx/certs:ro
     networks:
       - neo4flix-net
 

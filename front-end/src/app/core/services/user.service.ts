@@ -54,6 +54,7 @@ export class UserService {
       data
     ).pipe(
       tap((response: AuthResponse) => {
+        console.log("[LOGIN REPSONSE in user service] --------------->", response)
         if (response.token) {
           this.authState.setToken(response.token);
         }
