@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import {
@@ -16,7 +17,7 @@ import { RatingSummary } from '../../models/rating.model';
 @Component({
   selector: 'app-movie-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './movie-detail.component.html'
 })
 export class MovieDetailComponent implements OnInit {
@@ -25,6 +26,7 @@ export class MovieDetailComponent implements OnInit {
   private movieService = inject(MovieService);
   private ratingService = inject(RatingService);
   private userService = inject(UserService);
+  readonly authenticated$ = this.userService.authenticated$;
   private authState = inject(AuthStateService);
   private router = inject(Router);
   movieId!: number;
@@ -36,6 +38,11 @@ export class MovieDetailComponent implements OnInit {
   isRatingSubmitting = false;
   ratingMessage = '';
   ratingError = '';
+  isShareModalOpen = false;
+  isShareSubmitting = false;
+  friendEmail = '';
+  shareMessage = '';
+  shareError = '';
   ratingSummary: RatingSummary = {
     averageRating: 0, ratingCount: 0,
     movieId: 0, userRating: 0 // Initialize userId as an empty string
@@ -216,6 +223,44 @@ export class MovieDetailComponent implements OnInit {
           err
         );
       }
+    });
+  }
+
+  openShareModal(): void {
+    this.friendEmail = '';
+    this.shareError = '';
+    this.shareMessage = '';
+    this.isShareModalOpen = true;
+  }
+
+  closeShareModal(): void {
+    if (this.isShareSubmitting) return;
+    this.isShareModalOpen = false;
+    this.shareError = '';
+  }
+
+  submitMovieShare(): void {
+    if (this.isShareSubmitting || !this.userService.isAuthenticated()) {
+      this.shareError = 'Please sign in to share a movie.';
+      return;
+    }
+
+    this.isShareSubmitting = true;
+    this.shareError = '';
+    this.userService.shareMovie({
+      movieId: Number(this.movie.id),
+      friendEmail: this.friendEmail.trim(),
+    }).subscribe({
+      next: (response) => {
+        this.shareMessage = response.message || 'Movie shared successfully';
+        this.isShareSubmitting = false;
+        this.isShareModalOpen = false;
+        this.friendEmail = '';
+      },
+      error: (error) => {
+        this.shareError = error.error?.message || 'Could not share this movie. Please try again.';
+        this.isShareSubmitting = false;
+      },
     });
   }
 

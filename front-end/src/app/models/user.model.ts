@@ -58,3 +58,21 @@ export interface WatchlistStatusResponse {
   movieId: number;
   inWatchlist: boolean;
 }
+
+export interface ShareMovieRequest {
+  movieId: number;
+  friendEmail: string;
+}
+
+export interface ShareMovieResponse {
+  message: string;
+  shareId: number;
+}
+
+export interface ReceivedMovieShare {
+  id: number;
+  movieId: number;
+  senderUserId: number;
+  friendEmail: string;
+  createdAt: string;
+}

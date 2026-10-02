@@ -224,6 +224,15 @@
 
           </button>
 
+          <button
+            *ngIf="authenticated$ | async"
+            type="button"
+            (click)="openShareModal()"
+            class="border border-gray-700 hover:border-brand-red text-gray-300 hover:text-white text-xs px-5 py-2.5 rounded transition-all"
+          >
+            SHARE
+          </button>
+
 
           <!-- ======================================== -->
           <!-- STAR RATING -->
@@ -269,6 +278,7 @@
           <p *ngIf="isRatingSubmitting" class="mt-2 text-xs text-gray-400" aria-live="polite">Saving rating…</p>
           <p *ngIf="ratingMessage" class="mt-2 text-xs text-green-400" role="status">{{ ratingMessage }}</p>
           <p *ngIf="ratingError" class="mt-2 text-xs text-red-400" role="alert">{{ ratingError }}</p>
+          <p *ngIf="shareMessage" class="w-full mt-2 text-xs text-green-400" role="status">{{ shareMessage }}</p>
 
         </div>
 
@@ -277,6 +287,63 @@
     </div>
 
   </section>
+
+  <div
+    *ngIf="isShareModalOpen"
+    class="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+    role="presentation"
+    (click)="closeShareModal()"
+  >
+    <section
+      class="w-full max-w-md bg-[#0B0A0F] border border-gray-800 rounded-lg p-6 space-y-5 shadow-spidey-glow"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="share-movie-title"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="space-y-1">
+        <h2 id="share-movie-title" class="font-netflix text-xl text-white">SHARE MOVIE</h2>
+        <p class="text-xs text-gray-400">{{ movie.title }}</p>
+      </div>
+
+      <form #shareForm="ngForm" (ngSubmit)="submitMovieShare()" class="space-y-4">
+        <label for="friend-email" class="block space-y-2 text-xs text-gray-300">
+          FRIEND'S EMAIL
+          <input
+            id="friend-email"
+            name="friendEmail"
+            type="email"
+            [(ngModel)]="friendEmail"
+            required
+            email
+            autocomplete="email"
+            class="w-full bg-black border border-gray-700 rounded px-3 py-2.5 text-sm text-white outline-none focus:border-brand-red"
+            placeholder="friend@example.com"
+          />
+        </label>
+
+        <p *ngIf="shareError" class="text-xs text-red-400" role="alert">{{ shareError }}</p>
+
+        <div class="flex justify-end gap-3">
+          <button
+            type="button"
+            (click)="closeShareModal()"
+            [disabled]="isShareSubmitting"
+            class="border border-gray-700 hover:border-gray-500 text-gray-300 text-xs px-4 py-2 rounded disabled:opacity-50"
+          >
+            CANCEL
+          </button>
+          <button
+            type="submit"
+            [disabled]="shareForm.invalid || isShareSubmitting"
+            class="bg-brand-red hover:bg-brand-red-glow text-white text-xs px-4 py-2 rounded disabled:opacity-50"
+          >
+            {{ isShareSubmitting ? 'SHARING...' : 'SHARE' }}
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
 
 
 

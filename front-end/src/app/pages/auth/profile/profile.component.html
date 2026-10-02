@@ -285,6 +285,17 @@
           FAVORITES
         </button>
 
+        <button
+          type="button"
+          (click)="setTab('shares')"
+          [class.text-brand-red]="activeTab === 'shares'"
+          [class.border-b-2]="activeTab === 'shares'"
+          [class.border-brand-red]="activeTab === 'shares'"
+          class="font-netflix text-base md:text-xl text-gray-400 hover:text-white transition-all pb-1 tracking-wider whitespace-nowrap"
+        >
+          SHARED WITH ME
+        </button>
+
 
         <!-- SETTINGS -->
         <button
@@ -627,6 +638,42 @@
         </div>
 
       </div>
+
+
+      <section
+        *ngIf="activeTab === 'shares' && !isLoading"
+        class="space-y-5"
+      >
+        <div>
+          <h3 class="font-netflix text-2xl text-white tracking-wider">SHARED WITH ME</h3>
+          <p class="text-xs text-gray-400 mt-1">MOVIES SENT TO YOUR ACCOUNT</p>
+        </div>
+
+        <p *ngIf="isLoadingReceivedShares" class="py-10 text-center text-xs text-gray-400" aria-live="polite">
+          LOADING SHARED MOVIES...
+        </p>
+        <p *ngIf="receivedSharesError" class="py-6 text-xs text-red-400" role="alert">
+          {{ receivedSharesError }}
+        </p>
+
+        <div *ngIf="!isLoadingReceivedShares && !receivedSharesError && receivedShares.length > 0" class="divide-y divide-gray-800 border-y border-gray-800">
+          <a
+            *ngFor="let share of receivedShares"
+            [routerLink]="['/movie', share.movieId]"
+            class="flex items-center justify-between gap-4 py-4 text-sm hover:text-brand-red transition-colors"
+          >
+            <span class="min-w-0">
+              <span class="block truncate text-white">{{ share.movieTitle }}</span>
+              <span class="block mt-1 text-[10px] text-gray-500">MOVIE ID: {{ share.movieId }}</span>
+            </span>
+            <span class="shrink-0 text-[10px] text-gray-500">{{ share.createdAt | date:'mediumDate' }}</span>
+          </a>
+        </div>
+
+        <p *ngIf="!isLoadingReceivedShares && !receivedSharesError && receivedShares.length === 0" class="py-16 text-center border border-dashed border-gray-800 rounded-lg text-xs text-gray-500">
+          NO MOVIES HAVE BEEN SHARED WITH YOU YET.
+        </p>
+      </section>
 
 
       <!-- =====================================================

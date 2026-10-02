@@ -2,11 +2,11 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { switchMap, of } from 'rxjs';
+import { switchMap, of, map } from 'rxjs';
 
 import { UserService } from '../../../core/services/user.service';
 import { MovieService } from '../../../core/services/movie.service';
-import { UserProfile, UserProfileUpdateRequest } from '../../../models/user.model';
+import { ReceivedMovieShare, UserProfile, UserProfileUpdateRequest } from '../../../models/user.model';
 import { MovieCard } from '../../../models/movie.model';
 
 @Component({
@@ -21,7 +21,7 @@ export class ProfileComponent implements OnInit {
   private readonly movieService = inject(MovieService);
   private readonly router = inject(Router);
 
-  activeTab: 'watchlist' | 'favorites' | 'settings' = 'watchlist';
+  activeTab: 'watchlist' | 'favorites' | 'settings' | 'shares' = 'watchlist';
 
   user: UserProfile = {
     fullName: '',
@@ -38,17 +38,21 @@ export class ProfileComponent implements OnInit {
   };
 
   watchlist: MovieCard[] = [];
+  receivedShares: Array<ReceivedMovieShare & { movieTitle: string }> = [];
 
   successMessage = '';
   errorMessage = '';
 
   isLoading = false;
   isLoadingWatchlist = false;
+  isLoadingReceivedShares = false;
+  receivedSharesError = '';
   isSaving = false;
 
   ngOnInit(): void {
     this.loadProfile();
     this.loadWatchlist();
+    this.loadReceivedShares();
   }
 
   /**
@@ -76,6 +80,37 @@ export class ProfileComponent implements OnInit {
           this.isLoadingWatchlist = false;
         }
       });
+  }
+
+  loadReceivedShares(): void {
+    this.isLoadingReceivedShares = true;
+    this.receivedSharesError = '';
+
+    this.userService.getReceivedMovieShares().pipe(
+      switchMap((shares) => {
+        if (shares.length === 0) return of([]);
+
+        return this.movieService.getMoviesByIds(shares.map((share) => share.movieId)).pipe(
+          map((movies) => {
+            const moviesById = new Map(movies.map((movie) => [String(movie.id), movie]));
+            return shares.map((share) => ({
+              ...share,
+              movieTitle: moviesById.get(String(share.movieId))?.title ?? `Movie ${share.movieId}`,
+            }));
+          }),
+        );
+      }),
+    ).subscribe({
+      next: (shares) => {
+        this.receivedShares = shares;
+        this.isLoadingReceivedShares = false;
+      },
+      error: (error) => {
+        console.error('Failed to load received movie shares:', error);
+        this.receivedSharesError = 'Could not load movies shared with you.';
+        this.isLoadingReceivedShares = false;
+      },
+    });
   }
 
   /**
@@ -123,7 +158,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  setTab(tab: 'watchlist' | 'favorites' | 'settings'): void {
+  setTab(tab: 'watchlist' | 'favorites' | 'settings' | 'shares'): void {
     this.activeTab = tab;
     this.successMessage = '';
     this.errorMessage = '';

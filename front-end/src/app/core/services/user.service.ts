@@ -14,7 +14,10 @@ import {
   UserProfile,
   UserProfileUpdateRequest,
   WatchlistItem,
-  WatchlistStatusResponse
+  WatchlistStatusResponse,
+  ShareMovieRequest,
+  ShareMovieResponse,
+  ReceivedMovieShare
 } from '../../models/user.model';
 
 @Injectable({
@@ -116,6 +119,14 @@ export class UserService {
     return this.http.get<boolean>(
       `${this.apiUrl}/users/watchlist/check/${movieId}`
     );
+  }
+
+  shareMovie(request: ShareMovieRequest): Observable<ShareMovieResponse> {
+    return this.http.post<ShareMovieResponse>(`${this.apiUrl}/shares`, request);
+  }
+
+  getReceivedMovieShares(): Observable<ReceivedMovieShare[]> {
+    return this.http.get<ReceivedMovieShare[]>(`${this.apiUrl}/shares/received`);
   }
 
 
