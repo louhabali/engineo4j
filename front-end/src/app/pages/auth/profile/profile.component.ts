@@ -163,6 +163,7 @@ export class ProfileComponent implements OnInit {
     this.activeTab = tab;
     this.successMessage = '';
     this.errorMessage = '';
+    this.updateError = '';
   }
 
   onSaveSettings(): void {
