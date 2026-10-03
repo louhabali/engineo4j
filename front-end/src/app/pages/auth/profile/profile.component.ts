@@ -42,6 +42,7 @@ export class ProfileComponent implements OnInit {
 
   successMessage = '';
   errorMessage = '';
+  updateError = '';
 
   isLoading = false;
   isLoadingWatchlist = false;
@@ -168,7 +169,7 @@ export class ProfileComponent implements OnInit {
     if (this.isSaving) return;
 
     this.successMessage = '';
-    this.errorMessage = '';
+    this.updateError = '';
 
     const request: UserProfileUpdateRequest = {
       fullName: this.settingsForm.fullName.trim(),
@@ -176,7 +177,7 @@ export class ProfileComponent implements OnInit {
     };
 
     if (!request.fullName || !request.email) {
-      this.errorMessage = 'Full name and email are required.';
+      this.updateError = 'Full name and email are required.';
       return;
     }
 
@@ -193,9 +194,9 @@ export class ProfileComponent implements OnInit {
         this.successMessage = 'Profile updated successfully.';
         setTimeout(() => (this.successMessage = ''), 3000);
       },
-      error: (error) => {
+      error: (err) => {
         this.isSaving = false;
-        this.errorMessage = 'Failed to update profile settings.';
+        this.updateError = err.error?.errorMessage || 'Failed to update profile settings.';
       }
     });
   }
