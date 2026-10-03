@@ -1,8 +1,8 @@
 package com.cinema.user.controller;
 
-import com.cinema.user.dto.ShareMovieRequest;
-import com.cinema.user.dto.ShareMovieResponse;
-import com.cinema.user.dto.ReceivedMovieShareResponse;
+import com.cinema.user.dto.shared_movies.ShareMovieRequest;
+import com.cinema.user.dto.shared_movies.ShareMovieResponse;
+import com.cinema.user.dto.shared_movies.ReceivedMovieShareResponse;
 import com.cinema.user.service.MovieShareService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

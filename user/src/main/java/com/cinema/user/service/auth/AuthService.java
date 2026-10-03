@@ -1,12 +1,12 @@
 package com.cinema.user.service.auth;
 
-import com.cinema.user.dto.AuthResponse;
-import com.cinema.user.dto.LoginRequest;
-import com.cinema.user.dto.MfaLoginRequest;
-import com.cinema.user.dto.MfaLoginResponse;
-import com.cinema.user.dto.MfaVerifyRequest;
-import com.cinema.user.dto.RegisterRequest;
-import com.cinema.user.dto.RegisterResponse;
+import com.cinema.user.dto.login.AuthResponse;
+import com.cinema.user.dto.login.LoginRequest;
+import com.cinema.user.dto.login.MfaLoginRequest;
+import com.cinema.user.dto.login.MfaLoginResponse;
+import com.cinema.user.dto.login.MfaVerifyRequest;
+import com.cinema.user.dto.register.RegisterRequest;
+import com.cinema.user.dto.register.RegisterResponse;
 import com.cinema.user.models.User;
 import com.cinema.user.repository.UserRepository;
 

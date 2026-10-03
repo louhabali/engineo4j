@@ -1,4 +1,4 @@
-package com.cinema.user.dto;
+package com.cinema.user.dto.totp;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

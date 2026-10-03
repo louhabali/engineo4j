@@ -17,4 +17,6 @@ public interface MovieShareRepository extends JpaRepository<MovieShare, Long> {
 	List<MovieShare> findReceivedShares(
 			@Param("recipientUserId") Long recipientUserId,
 			@Param("recipientEmail") String recipientEmail);
+
+	boolean existsBySenderUserIdAndRecipientUserIdAndMovieId(Long senderUserId, Long recipientUserId, Long movieId);
 }

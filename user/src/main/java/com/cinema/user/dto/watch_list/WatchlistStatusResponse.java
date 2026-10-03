@@ -1,4 +1,4 @@
-package com.cinema.user.dto;
+package com.cinema.user.dto.watch_list;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

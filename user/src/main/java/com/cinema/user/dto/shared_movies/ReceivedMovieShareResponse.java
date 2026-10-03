@@ -1,4 +1,4 @@
-package com.cinema.user.dto;
+package com.cinema.user.dto.shared_movies;
 
 import java.time.LocalDateTime;
 

@@ -110,8 +110,8 @@ export class RegisterComponent {
     });
   }
 
-  skipMfa(): void {
-    this.showMfaPopup = false;
-    this.router.navigate(['/login']);
-  }
+  // skipMfa(): void {
+  //   this.showMfaPopup = false;
+  //   this.router.navigate(['/login']);
+  // }
 }

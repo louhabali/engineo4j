@@ -50,6 +50,7 @@ export const routes: Routes = [
   { path: '403', component: ErrorComponent, data: { code: '403' } },
   { path: '500', component: ErrorComponent, data: { code: '500' } },
   { path: '404', component: ErrorComponent, data: { code: '404' } },
+  { path: '400', component: ErrorComponent, data: { code: '400' } },
 
   // WILDCARD REDIRECT TO 404
   { path: '**', redirectTo: '404' }

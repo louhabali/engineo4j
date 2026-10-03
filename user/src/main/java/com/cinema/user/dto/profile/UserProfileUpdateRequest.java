@@ -1,4 +1,4 @@
-package com.cinema.user.dto;
+package com.cinema.user.dto.profile;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

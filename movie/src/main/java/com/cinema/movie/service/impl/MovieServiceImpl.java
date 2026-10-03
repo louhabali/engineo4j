@@ -53,7 +53,12 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public MovieResponseDto getMovieById(long movieId) {
-
+        if (movieId <= 0) {
+            throw new IllegalArgumentException("Movie ID must be a positive number.");
+        }
+        if (movieId > Integer.MAX_VALUE) {
+            throw new IllegalArgumentException("Movie ID exceeds the maximum allowed value.");
+        }
         return movieRepository.findById(movieId)
                 .map(this::mapToDto)
                 .orElseThrow(

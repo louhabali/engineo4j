@@ -1,7 +1,7 @@
 package com.cinema.user.service;
 
-import com.cinema.user.dto.UserProfileResponse;
-import com.cinema.user.dto.UserProfileUpdateRequest;
+import com.cinema.user.dto.profile.UserProfileResponse;
+import com.cinema.user.dto.profile.UserProfileUpdateRequest;
 import com.cinema.user.exceptions.ResourceNotFoundException;
 import com.cinema.user.models.User;
 import com.cinema.user.repository.UserRepository;

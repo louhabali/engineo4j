@@ -70,13 +70,19 @@ export class MovieDetailComponent implements OnInit {
 
     if (!idParam) {
       console.error('Movie ID not found in route');
+      this.router.navigate(['/404']);
       return;
     }
 
     this.movieId = Number(idParam);
+    if (this.movieId <= 0 || this.movieId >= 80 || this.movieId > Number.MAX_SAFE_INTEGER) {
+      this.router.navigate(['/404']);
+      return;
+    }
 
     if (isNaN(this.movieId)) {
-      console.error('Invalid movie ID:', idParam);
+      // console.error('Invalid movie ID:', idParam);
+      this.router.navigate(['/404'])
       return;
     }
 
@@ -107,9 +113,23 @@ export class MovieDetailComponent implements OnInit {
       },
       error: (err) => {
         console.error('Failed to fetch movie details:', err);
-        if (err.status === 404) {
-          this.router.navigate(['/404']);
+        switch (err.status) {
+          case 404:
+            this.router.navigate(['/404']);
+            break
+          case 401:
+            this.router.navigate(['/401']);
+            break
+          case 429:
+            this.router.navigate(['/429']);
+            break
+          case 400:
+            this.router.navigate(['/400']);
+            break
+          default:
+            this.router.navigate(['/403']);
         }
+
       }
     });
   }
@@ -258,7 +278,7 @@ export class MovieDetailComponent implements OnInit {
         this.friendEmail = '';
       },
       error: (error) => {
-        this.shareError = error.error?.message || 'Could not share this movie. Please try again.';
+        this.shareError = error.error?.errorMessage || 'Could not share this movie. Please try again.';
         this.isShareSubmitting = false;
       },
     });

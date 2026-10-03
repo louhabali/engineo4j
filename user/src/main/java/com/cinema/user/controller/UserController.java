@@ -1,7 +1,7 @@
 package com.cinema.user.controller;
 
-import com.cinema.user.dto.UserProfileResponse;
-import com.cinema.user.dto.UserProfileUpdateRequest;
+import com.cinema.user.dto.profile.UserProfileResponse;
+import com.cinema.user.dto.profile.UserProfileUpdateRequest;
 import com.cinema.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

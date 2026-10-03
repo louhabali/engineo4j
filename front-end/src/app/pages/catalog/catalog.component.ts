@@ -54,7 +54,7 @@ export class CatalogComponent implements OnInit {
     // Initial load delay
     setTimeout(() => {
       this.loadMovies(true);
-    }, 2000);
+    }, 1000);
   }
 
   // TOGGLE HANDLERS FOR MOBILE UI

@@ -1,4 +1,4 @@
-package com.cinema.user.dto;
+package com.cinema.user.dto.register;
 // package com.example.userservice.auth.dto;
 
 import jakarta.validation.constraints.Email;

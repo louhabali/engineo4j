@@ -1,4 +1,4 @@
-package com.cinema.user.dto;
+package com.cinema.user.dto.shared_movies;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -22,7 +22,8 @@ export class ErrorComponent implements OnInit {
     '429': { code: '429', title: 'REQUEST LIMIT EXCEEDED', description: 'You have exceeded the rate limit for this API endpoint.' },
     '403': { code: '403', title: 'NODE ACCESS FORBIDDEN', description: 'You do not have sufficient permissions to traverse this graph resource.' },
     '404': { code: '404', title: 'NODE NOT FOUND', description: 'The requested graph traversal route or movie node does not exist in the database.' },
-    '500': { code: '500', title: 'GRAPH ENGINE FAILURE', description: 'An unexpected internal error occurred while executing the Neo4j query.' }
+    '500': { code: '500', title: 'GRAPH ENGINE FAILURE', description: 'An unexpected internal error occurred while executing the Neo4j query.' },
+    '400': { code: '400', title: 'BAD REQUEST', description: 'The request was malformed or contained invalid parameters.' },
   };
 
   currentError: ErrorConfig = this.errorConfigs['404'];

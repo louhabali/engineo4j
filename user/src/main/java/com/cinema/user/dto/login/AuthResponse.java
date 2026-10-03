@@ -1,4 +1,4 @@
-package com.cinema.user.dto;
+package com.cinema.user.dto.login;
 
 import lombok.Data;
 
