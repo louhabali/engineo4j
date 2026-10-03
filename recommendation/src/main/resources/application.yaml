@@ -5,12 +5,12 @@ spring:
   application:
     name: recommendation-service
   neo4j:
-    uri: ${SPRING_NEO4J_URI:bolt://localhost:7687}
+    uri: ${SPRING_NEO4J_URI:bolt://example.invalid:7687}
     authentication:
-      username: ${SPRING_NEO4J_USERNAME:neo4j}
-      password: ${SPRING_NEO4J_PASSWORD:password}
+      username: ${SPRING_NEO4J_USERNAME:example_user}
+      password: ${SPRING_NEO4J_PASSWORD:example_password}
   kafka:
-    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:example.invalid:9092}
     consumer:
       group-id: recommendation-service-group
       auto-offset-reset: earliest

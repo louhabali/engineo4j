@@ -5,9 +5,9 @@ spring:
   application:
     name: user
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/user_db}
-    username: ${SPRING_DATASOURCE_USERNAME:pgadmin}
-    password: ${SPRING_DATASOURCE_PASSWORD:pgpass}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://example.invalid:5432/example_db}
+    username: ${SPRING_DATASOURCE_USERNAME:example_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:example_password}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -21,11 +21,11 @@ spring:
     type: redis
   data:
     redis:
-      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      host: ${SPRING_DATA_REDIS_HOST:example.invalid}
       port: ${SPRING_DATA_REDIS_PORT:6379}
 
 jwt:
-  secret: ${JWT_SECRET:your_super_secret_key_that_is_at_least_32_bytes_long}
+  secret: ${JWT_SECRET:example_only_not_a_real_jwt_secret}
   expiration: 86400000
 
 logging:

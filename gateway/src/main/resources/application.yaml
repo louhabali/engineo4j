@@ -6,37 +6,37 @@ spring:
     name: gateway
   data:
     redis:
-      host: ${REDIS_HOST:localhost}
+      host: ${REDIS_HOST:example.invalid}
       port: ${REDIS_PORT:6379}
   cloud:
     gateway:
       routes:
         # 1. User Service
         - id: user-service
-          uri: ${USER_SERVICE_URL:http://localhost:8081}
+          uri: ${USER_SERVICE_URL:http://example.invalid:8081}
           predicates:
             - Path=/api/v1/users/**, /api/v1/auth/**, /api/v1/shares/**
 
         # 2. Movie Service
         - id: movie-service
-          uri: ${MOVIE_SERVICE_URL:http://localhost:8082}
+          uri: ${MOVIE_SERVICE_URL:http://example.invalid:8082}
           predicates:
             - Path=/api/v1/movies/**
 
         # 3. Rating Service
         - id: rating-service
-          uri: ${RATING_SERVICE_URL:http://localhost:8083}
+          uri: ${RATING_SERVICE_URL:http://example.invalid:8083}
           predicates:
             - Path=/api/v1/ratings/**
 
         # 4. Recommendation Service
         - id: recommendation-service
-          uri: ${RECOMMENDATION_SERVICE_URL:http://localhost:8084}
+          uri: ${RECOMMENDATION_SERVICE_URL:http://example.invalid:8084}
           predicates:
             - Path=/api/v1/recommendations/**
 
 jwt:
-  secret: ${JWT_SECRET:your_super_secret_key_that_is_at_least_32_bytes_long}
+  secret: ${JWT_SECRET:example_only_not_a_real_jwt_secret}
   # expiration: 86400000
 
 logging:

@@ -3,13 +3,13 @@ services:
     image: postgres:15-alpine
     container_name: neo4flix-postgres
     environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: pgadmin
-      POSTGRES_PASSWORD: pgpass
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d postgres" ]
+      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}" ]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -36,12 +36,12 @@ services:
     image: neo4j:5.15-community
     container_name: neo4flix-neo4j
     environment:
-      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:-password}
+      NEO4J_AUTH: ${NEO4J_USERNAME}/${NEO4J_PASSWORD}
     ports:
       - "7474:7474" # Browser UI
       - "7687:7687" # Bolt Protocol
     healthcheck:
-      test: [ "CMD-SHELL", "cypher-shell -u neo4j -p '${NEO4J_PASSWORD:-password}' 'RETURN 1' >/dev/null 2>&1" ]
+      test: [ "CMD-SHELL", "cypher-shell -u '${NEO4J_USERNAME}' -p '${NEO4J_PASSWORD}' 'RETURN 1' >/dev/null 2>&1" ]
       interval: 10s
       timeout: 10s
       retries: 12
@@ -93,12 +93,12 @@ services:
   user-service:
     build: ./user
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/user_db
-      SPRING_DATASOURCE_USERNAME: pgadmin
-      SPRING_DATASOURCE_PASSWORD: pgpass
-      SPRING_DATA_REDIS_HOST: redis
-      SPRING_DATA_REDIS_PORT: 6379
-      JWT_SECRET: ${JWT_SECRET:-your_super_secret_key_that_is_at_least_32_bytes_long}
+      SPRING_DATASOURCE_URL: ${USER_DB_URL}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      SPRING_DATA_REDIS_HOST: ${REDIS_HOST}
+      SPRING_DATA_REDIS_PORT: ${REDIS_PORT}
+      JWT_SECRET: ${JWT_SECRET}
     depends_on:
       postgres:
         condition: service_healthy
@@ -110,13 +110,13 @@ services:
   movie-service:
     build: ./movie
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/movie_db
-      SPRING_DATASOURCE_USERNAME: pgadmin
-      SPRING_DATASOURCE_PASSWORD: pgpass
-      POSTGRES_HOST: postgres
-      POSTGRES_PORT: 5432
-      SPRING_DATA_REDIS_HOST: redis
-      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_DATASOURCE_URL: ${MOVIE_DB_URL}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      SPRING_DATA_REDIS_HOST: ${REDIS_HOST}
+      SPRING_DATA_REDIS_PORT: ${REDIS_PORT}
     depends_on:
       postgres:
         condition: service_healthy
@@ -128,10 +128,10 @@ services:
   rating-service:
     build: ./rating
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/rating_db
-      SPRING_DATASOURCE_USERNAME: pgadmin
-      SPRING_DATASOURCE_PASSWORD: pgpass
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka-service:29092
+      SPRING_DATASOURCE_URL: ${RATING_DB_URL}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
     depends_on:
       postgres:
         condition: service_healthy
@@ -143,10 +143,10 @@ services:
   recommendation-service:
     build: ./recommendation
     environment:
-      SPRING_NEO4J_URI: bolt://neo4j:7687
-      SPRING_NEO4J_USERNAME: neo4j
-      SPRING_NEO4J_PASSWORD: ${NEO4J_PASSWORD:-password}
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka-service:29092
+      SPRING_NEO4J_URI: ${NEO4J_URI}
+      SPRING_NEO4J_USERNAME: ${NEO4J_USERNAME}
+      SPRING_NEO4J_PASSWORD: ${NEO4J_PASSWORD}
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
     depends_on:
       neo4j:
         condition: service_healthy
@@ -158,13 +158,13 @@ services:
   gateway:
     build: ./gateway
     environment:
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      USER_SERVICE_URL: http://user-service:8081
-      MOVIE_SERVICE_URL: http://movie-service:8082
-      RATING_SERVICE_URL: http://rating-service:8083
-      RECOMMENDATION_SERVICE_URL: http://recommendation-service:8084
-      JWT_SECRET: ${JWT_SECRET:-your_super_secret_key_that_is_at_least_32_bytes_long}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      USER_SERVICE_URL: ${USER_SERVICE_URL}
+      MOVIE_SERVICE_URL: ${MOVIE_SERVICE_URL}
+      RATING_SERVICE_URL: ${RATING_SERVICE_URL}
+      RECOMMENDATION_SERVICE_URL: ${RECOMMENDATION_SERVICE_URL}
+      JWT_SECRET: ${JWT_SECRET}
     depends_on:
       redis:
         condition: service_healthy
